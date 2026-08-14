@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>รายละเอียดสถานที่ — พัทลุงไกด์ AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <span class="brand-mark"><i class="fa-solid fa-mountain-sun"></i></span>
+      <span class="brand-text">
+        <strong>พัทลุงไกด์</strong>
+        <em>AI Travel</em>
+      </span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">หน้าแรก</a>
+      <a href="categories.html">หมวดหมู่</a>
+      <a href="places.html">สถานที่</a>
+      <a href="ai.html">AI แนะนำ</a>
+      <a href="about.html">เกี่ยวกับ</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="เมนู" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-actions">
+      <button class="btn-login" id="btnOpenAuth">
+        <i class="fa-solid fa-right-to-bracket"></i>
+        <span>เข้าสู่ระบบ</span>
+      </button>
+      <div class="user-menu hidden" id="userMenu">
+        <button class="avatar" id="avatarBtn" aria-label="โปรไฟล์">N</button>
+        <div class="dropdown" id="userDropdown">
+          <div class="dd-user">
+            <div class="dd-avatar" id="ddAvatar">N</div>
+            <div>
+              <div class="dd-name" id="ddName">Guest</div>
+              <div class="dd-email" id="ddEmail">-</div>
+            </div>
+          </div>
+          <button data-go="profile.html"><i class="fa-solid fa-user"></i> โปรไฟล์ของฉัน</button>
+          <button data-go="places.html?view=fav"><i class="fa-solid fa-heart"></i> รายการโปรด</button>
+          <button id="btnLogout" class="danger"><i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- เนื้อหาถูกเติมด้วย place.js -->
+<main id="placeDetail" class="place-detail">
+  <div class="pd-loading"><i class="fa-solid fa-spinner fa-spin"></i> กำลังโหลด...</div>
+</main>
+
+<footer class="footer">
+  <div class="container foot-grid">
+    <div>
+      <div class="brand light">
+        <span class="brand-mark"><i class="fa-solid fa-mountain-sun"></i></span>
+        <span class="brand-text"><strong>พัทลุงไกด์</strong><em>AI Travel</em></span>
+      </div>
+      <p>ท่องพัทลุงในมุมใหม่ ด้วยพลังของ AI</p>
+    </div>
+    <div>
+      <h4>เมนู</h4>
+      <a href="categories.html">หมวดหมู่</a><a href="places.html">สถานที่</a><a href="ai.html">AI แนะนำ</a><a href="about.html">เกี่ยวกับ</a>
+    </div>
+    <div>
+      <h4>ติดต่อ</h4>
+      <p><i class="fa-solid fa-envelope"></i> hello@phatthalung.ai</p>
+      <p><i class="fa-solid fa-phone"></i> 074-xxx-xxx</p>
+    </div>
+  </div>
+  <div class="foot-bot">© 2026 Phatthalung AI Travel Guide</div>
+</footer>
+
+<!-- กล่อง login (ใช้ร่วมกับหน้าอื่น) -->
+<div class="modal hidden" id="authModal">
+  <div class="modal-card auth-card">
+    <div class="auth-hero">
+      <span class="ah-sun"></span>
+      <span class="ah-beam ah-beam1"></span>
+      <span class="ah-beam ah-beam2"></span>
+      <span class="ah-beam ah-beam3"></span>
+      <span class="ah-particles"></span>
+      <span class="ah-mist"></span>
+      <div class="ah-caption">
+        <span class="ah-eyebrow">แสงรุ่งปากประ</span>
+        <b>ทะเลสาบพัทลุง</b>
+        <p>ยามเช้าเหนือทะเลน้อย</p>
+      </div>
+    </div>
+    <div class="auth-body">
+      <button class="modal-close" data-close><i class="fa-solid fa-xmark"></i></button>
+      <div class="auth-tabs" data-active="login">
+        <button class="active" data-tab="login"><i class="fa-solid fa-right-to-bracket"></i>เข้าสู่ระบบ</button>
+        <button data-tab="signup"><i class="fa-solid fa-user-plus"></i>สมัครสมาชิก</button>
+      </div>
+      <form id="loginForm" class="auth-form">
+        <label>อีเมล<input type="email" name="email" required placeholder="you@email.com" /></label>
+        <label>รหัสผ่าน<input type="password" name="password" required placeholder="••••••••" /></label>
+        <button type="submit" class="btn-primary">เข้าสู่ระบบ</button>
+      </form>
+      <form id="signupForm" class="auth-form hidden">
+        <label>ชื่อ<input type="text" name="name" required placeholder="ชื่อของคุณ" /></label>
+        <label>อีเมล<input type="email" name="email" required placeholder="you@email.com" /></label>
+        <label>รหัสผ่าน<input type="password" name="password" required placeholder="••••••••" /></label>
+        <button type="submit" class="btn-primary">สมัครสมาชิก</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="places-data.js"></script>
+<script type="module" src="cloud.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="app.js"></script>
+<script src="place.js"></script>
+</body>
+</html>
