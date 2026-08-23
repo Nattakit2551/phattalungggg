@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รายการโปรดของฉัน - พัทลุงไกด์ AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="">
+    
+    <header class="navbar-wrapper">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                <div class="logo-icon"><i class="fa-solid fa-mountain-sun"></i></div>
+                <div class="logo-text">
+                    <strong>พัทลุงไกด์</strong>
+                    <span>AI Travel Planner</span>
+                </div>
+            </a>
+            <nav class="nav-links">
+                <a href="index.html" class="">หน้าแรก</a>
+                <a href="categories.html" class="">หมวดหมู่</a>
+                <a href="places.html" class="">สถานที่</a>
+                <a href="ai.html" class="">AI แนะนำ</a>
+                <a href="about.html" class="">เกี่ยวกับ</a>
+            </nav>
+            <div class="nav-actions">
+                <a href="ai.html" class="btn-ai-nav"><i class="fa-solid fa-wand-magic-sparkles"></i> <span>ให้ AI จัดทริป</span></a>
+                <div id="navUserArea">
+                    <a href="login.html" class="btn-login-pill">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                        <span>เข้าสู่ระบบ</span>
+                    </a>
+                </div>
+                <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle Menu"><i class="fa-solid fa-bars"></i></button>
+            </div>
+        </div>
+        <div class="mobile-nav" id="mobileNav">
+            <a href="index.html" class="">หน้าแรก</a>
+            <a href="categories.html" class="">หมวดหมู่</a>
+            <a href="places.html" class="">สถานที่</a>
+            <a href="ai.html" class="">AI แนะนำ</a>
+            <a href="about.html" class="">เกี่ยวกับ</a>
+            <a href="login.html" class="mobile-login-link mobile-ai-link"><i class="fa-solid fa-arrow-right-to-bracket"></i> เข้าสู่ระบบ</a>
+            <a href="profile.html" class="mobile-profile-link mobile-ai-link"><i class="fa-solid fa-user"></i> โปรไฟล์ของฉัน</a>
+            <a href="favorites.html" class="mobile-fav-link mobile-ai-link"><i class="fa-solid fa-heart" style="color: #ef4444;"></i> รายการโปรด</a>
+            <a href="ai.html" class="mobile-ai-link"><i class="fa-solid fa-wand-magic-sparkles"></i> ให้ AI จัดทริป</a>
+            <a href="admin.html" class="mobile-admin-link"><i class="fa-solid fa-gauge-high"></i> ระบบหลังบ้าน (แอดมิน)</a>
+        </div>
+    </header>
+
+    
+    <div class="page-header">
+        <div class="container">
+            <span class="sub-heading">My Saved Collection</span>
+            <h1>รายการ <em class="text-accent">สถานที่โปรด</em></h1>
+            <p>รวบรวมสถานที่ท่องเที่ยวและจุดเช็คอินเมืองพัทลุงที่คุณชื่นชอบไว้ในที่เดียว</p>
+        </div>
+    </div>
+
+    <section class="section py-5">
+        <div class="container">
+            
+            <!-- Filter & Search Controls in Favorites Page -->
+            <div class="filter-controls-card mb-4">
+                <div class="search-input-group">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="searchFavInput" placeholder="ค้นหาในรายการโปรดของคุณ..." oninput="filterFavoritesPage()">
+                </div>
+                <div class="results-header" style="margin-bottom: 0;">
+                    <div>บันทึกไว้ทั้งหมด <b id="favTotalCount">0</b> แห่ง</div>
+                    <div style="display: flex; gap: 0.75rem;">
+                        <button class="btn btn-outline" onclick="clearAllFavorites()"><i class="fa-solid fa-trash-can"></i> ล้างรายการโปรดทั้งหมด</button>
+                        <a href="places.html" class="btn btn-glow"><i class="fa-solid fa-plus"></i> เพิ่มสถานที่ใหม่</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Favorites Grid Container -->
+            <div class="cards-grid" id="favoritesPageGrid">
+                <!-- Rendered dynamically by script.js -->
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Modal Detail for Places -->
+    <div class="modal-backdrop" id="placeModal" onclick="closeModal(event)">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="brand-logo">
+                        <div class="logo-icon"><i class="fa-solid fa-mountain-sun"></i></div>
+                        <div class="logo-text">
+                            <strong>พัทลุงไกด์</strong>
+                            <span>AI Travel Guide</span>
+                        </div>
+                    </div>
+                    <p>ท่องพัทลุงในมุมมองใหม่ ด้วยระบบจำลองปัญญาประดิษฐ์ (AI) แผนที่เส้นทางจริง และระบบฐานข้อมูลคลาวด์ Firebase</p>
+                    <div class="footer-badges">
+                        <span><i class="fa-solid fa-shield-check"></i> ข้อมูลปี 2026</span>
+                        <span><i class="fa-solid fa-database"></i> Firebase Realtime DB</span>
+                        <span><i class="fa-solid fa-location-crosshairs"></i> Live GPS Tracking</span>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>เมนูหลัก</h4>
+                    <ul>
+                        <li><a href="index.html"><i class="fa-solid fa-angle-right"></i> หน้าแรก</a></li>
+                        <li><a href="categories.html"><i class="fa-solid fa-angle-right"></i> หมวดหมู่สถานที่</a></li>
+                        <li><a href="places.html"><i class="fa-solid fa-angle-right"></i> สถานที่ท่องเที่ยว (30 แห่ง)</a></li>
+                        <li><a href="ai.html"><i class="fa-solid fa-angle-right"></i> AI แนะนำแผนการท่องเที่ยว</a></li>
+                        <li><a href="favorites.html"><i class="fa-solid fa-angle-right"></i> รายการโปรด</a></li>
+                        <li><a href="profile.html"><i class="fa-solid fa-angle-right"></i> โปรไฟล์ผู้ใช้งาน</a></li>
+                        <li><a href="admin.html"><i class="fa-solid fa-angle-right"></i> ระบบหลังบ้าน Back Office</a></li>
+                    </ul>
+                </div>
+                <div class="footer-categories">
+                    <h4>หมวดหมู่ยอดฮิต</h4>
+                    <ul>
+                        <li><a href="places.html?cat=nature"><i class="fa-solid fa-leaf"></i> ธรรมชาติ & ทะเลสาบ</a></li>
+                        <li><a href="places.html?cat=adventure"><i class="fa-solid fa-person-hiking"></i> ล่องแก่ง & ผจญภัย</a></li>
+                        <li><a href="places.html?cat=culture"><i class="fa-solid fa-landmark"></i> ประวัติศาสตร์ & ศรัทธา</a></li>
+                        <li><a href="places.html?cat=food"><i class="fa-solid fa-utensils"></i> อาหาร & คาเฟ่</a></li>
+                        <li><a href="places.html?cat=family"><i class="fa-solid fa-people-roof"></i> ครอบครัว & วิถีชุมชน</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>ติดต่อ & แหล่งข้อมูล</h4>
+                    <p><i class="fa-solid fa-envelope"></i> contact@phatthalung-ai.travel</p>
+                    <p><i class="fa-solid fa-location-dot"></i> จังหวัดพัทลุง ภาคใต้ ประเทศไทย</p>
+                    <p><i class="fa-solid fa-shield-halved"></i> รหัสแอดมินค่าเริ่มต้น: <strong>123456</strong></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Phatthalung AI Travel Planner. พัฒนาขึ้นเพื่อส่งเสริมและยกระดับการท่องเที่ยวจังหวัดพัทลุง</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase App & Realtime Database SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
+    <!-- Leaflet JS & App Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
