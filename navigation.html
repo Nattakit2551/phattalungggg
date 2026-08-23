@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แผนที่และการนำทาง - พัทลุงไกด์ AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="nav-page-body">
+    
+    <header class="navbar-wrapper">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                <div class="logo-icon"><i class="fa-solid fa-mountain-sun"></i></div>
+                <div class="logo-text">
+                    <strong>พัทลุงไกด์</strong>
+                    <span>AI Travel Planner</span>
+                </div>
+            </a>
+            <nav class="nav-links">
+                <a href="index.html">หน้าแรก</a>
+                <a href="categories.html">หมวดหมู่</a>
+                <a href="places.html">สถานที่</a>
+                <a href="ai.html">AI แนะนำ</a>
+                <a href="navigation.html" class="active">แผนที่นำทาง</a>
+                <a href="about.html">เกี่ยวกับ</a>
+            </nav>
+            <div class="nav-actions">
+                <a href="ai.html" class="btn-ai-nav"><i class="fa-solid fa-wand-magic-sparkles"></i> <span>ให้ AI จัดทริป</span></a>
+                <div id="navUserArea">
+                    <a href="login.html" class="btn-login-pill"><i class="fa-solid fa-arrow-right-to-bracket"></i> <span>เข้าสู่ระบบ</span></a>
+                </div>
+                <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle Menu"><i class="fa-solid fa-bars"></i></button>
+            </div>
+        </div>
+        <div class="mobile-nav" id="mobileNav">
+            <a href="index.html">หน้าแรก</a>
+            <a href="categories.html">หมวดหมู่</a>
+            <a href="places.html">สถานที่</a>
+            <a href="ai.html">AI แนะนำ</a>
+            <a href="navigation.html" class="active">แผนที่นำทาง</a>
+            <a href="about.html">เกี่ยวกับ</a>
+            <a href="profile.html" class="mobile-profile-link"><i class="fa-solid fa-user"></i> โปรไฟล์ของฉัน</a>
+            <a href="favorites.html" class="mobile-fav-link"><i class="fa-solid fa-heart" style="color: #ef4444;"></i> รายการโปรด</a>
+            <a href="admin.html" class="mobile-admin-link"><i class="fa-solid fa-gauge-high"></i> แอดมิน</a>
+        </div>
+    </header>
+
+    <!-- Fullscreen Dedicated Navigation Map Workspace -->
+    <main class="fullscreen-map-wrapper">
+        <div class="fullscreen-map-header">
+            <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; max-width: 100%;">
+                <div>
+                    <span class="sub-heading"><i class="fa-solid fa-location-arrow text-accent"></i> Live GPS Navigation</span>
+                    <h1 id="navPageTitle" style="font-size: 1.5rem; color: #ffffff;">แผนที่นำทางสด</h1>
+                </div>
+                <div style="display: flex; gap: 0.75rem;">
+                    <button onclick="toggleRealLiveNav()" class="btn btn-glow" id="btnLiveNav"><i class="fa-solid fa-play"></i> เริ่มนำทางสด</button>
+                    <button onclick="locateUserPosition()" class="btn btn-outline"><i class="fa-solid fa-crosshairs"></i> ตำแหน่งฉัน</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="fullscreen-canvas-box" style="flex: 1; width: 100%; height: calc(100vh - 140px); min-height: 500px; position: relative;">
+            <div id="dedicatedNavMap" style="width: 100%; height: 100%; position: absolute; inset: 0; z-index: 1;"></div>
+            
+            <!-- Mobile HUD Overlay -->
+            <div class="mobile-nav-hud-overlay" id="mobileNavHudOverlay">
+                <div class="hud-top-info">
+                    <div class="hud-pulse-dot"></div>
+                    <span id="mobileHudInstruction">กำลังรอพิกัด GPS เพื่อนำทางบนถนนพัทลุง...</span>
+                </div>
+                <div class="hud-bottom-stats">
+                    <div><small>ระยะทาง</small><b id="hudDistVal">0 กม.</b></div>
+                    <div><small>เวลา</small><b id="hudTimeVal">0 นาที</b></div>
+                    <button onclick="toggleStepListModal()" class="btn-hud-sm"><i class="fa-solid fa-list-ol"></i> ขั้นตอน</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
+    <!-- Leaflet JS & App Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initDedicatedNavigationPage();
+        });
+    </script>
+</body>
+</html>
