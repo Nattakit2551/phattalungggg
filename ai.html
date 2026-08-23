@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI วางแผนท่องเที่ยวพัทลุง - พัทลุงไกด์ AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="">
+    
+    <header class="navbar-wrapper">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                <div class="logo-icon"><i class="fa-solid fa-mountain-sun"></i></div>
+                <div class="logo-text">
+                    <strong>พัทลุงไกด์</strong>
+                    <span>AI Travel Planner</span>
+                </div>
+            </a>
+            <nav class="nav-links">
+                <a href="index.html" class="">หน้าแรก</a>
+                <a href="categories.html" class="">หมวดหมู่</a>
+                <a href="places.html" class="">สถานที่</a>
+                <a href="ai.html" class="active">AI แนะนำ</a>
+                <a href="about.html" class="">เกี่ยวกับ</a>
+            </nav>
+            <div class="nav-actions">
+                <a href="ai.html" class="btn-ai-nav"><i class="fa-solid fa-wand-magic-sparkles"></i> <span>ให้ AI จัดทริป</span></a>
+                <div id="navUserArea">
+                    <a href="login.html" class="btn-login-pill">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                        <span>เข้าสู่ระบบ</span>
+                    </a>
+                </div>
+                <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle Menu"><i class="fa-solid fa-bars"></i></button>
+            </div>
+        </div>
+        <div class="mobile-nav" id="mobileNav">
+            <a href="index.html" class="">หน้าแรก</a>
+            <a href="categories.html" class="">หมวดหมู่</a>
+            <a href="places.html" class="">สถานที่</a>
+            <a href="ai.html" class="active">AI แนะนำ</a>
+            <a href="about.html" class="">เกี่ยวกับ</a>
+            <a href="ai.html" class="mobile-ai-link"><i class="fa-solid fa-wand-magic-sparkles"></i> ให้ AI จัดทริป</a>
+            <a href="login.html" class="mobile-login-link mobile-ai-link"><i class="fa-solid fa-arrow-right-to-bracket"></i> เข้าสู่ระบบ</a>
+            <a href="profile.html" class="mobile-profile-link mobile-ai-link"><i class="fa-solid fa-user"></i> โปรไฟล์ของฉัน</a>
+            <a href="ai.html" class="mobile-ai-link"><i class="fa-solid fa-wand-magic-sparkles"></i> ให้ AI จัดทริป</a>
+            <a href="admin.html" class="mobile-admin-link"><i class="fa-solid fa-gauge-high"></i> ระบบหลังบ้าน (แอดมิน)</a>
+        </div>
+    </header>
+
+    
+    <div class="page-header ai-header-gradient">
+        <div class="container">
+            <div class="hero-badge ai-badge"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Intelligent Trip Planner</div>
+            <h1>ให้ <em class="text-accent">AI วางแผนเที่ยว</em> พัทลุง</h1>
+            <p>ระบุความต้องการ จำนวนวัน สไตล์ที่ชอบ และผู้ร่วมเดินทาง แล้วให้ AI ออกแบบตารางทริป พร้อมปักหมุดมาร์กเกอร์และลากเส้นทางบนแผนที่แบบเรียงลำดับให้ทันที</p>
+        </div>
+    </div>
+
+    <section class="section py-5">
+        <div class="container">
+            
+            <!-- AI Planning Form Card -->
+            <div class="ai-form-card">
+                <div class="card-head">
+                    <h2><i class="fa-solid fa-sliders text-accent"></i> ปรับแต่งตัวเลือกแผนการเดินทางของคุณ</h2>
+                    <p>ระบบจะวิเคราะห์ระยะทาง เส้นทางเชื่อมต่อ และช่วงเวลาที่ดีที่สุดในการเที่ยวชมแต่ละจุด</p>
+                </div>
+
+                <form id="aiPlannerForm" onsubmit="event.preventDefault(); generateAIRoute();">
+                    <div class="planner-form-grid">
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-compass"></i> สไตล์การท่องเที่ยวหลัก</label>
+                            <select id="tripStyle" required>
+                                <option value="adventure">🛶 ผจญภัย & สายลุย (ล่องแก่ง/เขาบรรทัด/นาวง)</option>
+                                <option value="nature">🌿 ธรรมชาติ & สายนที (ทะเลน้อย/น้ำตก/ปากประ)</option>
+                                <option value="chill">☕ ชิลล์ คาเฟ่ & จุดชมวิวถ่ายรูป</option>
+                                <option value="culture">🏛️ วิถีชีวิต วัฒนธรรม & วัดวาอาราม</option>
+                                <option value="foodie">🍲 ตะลอนกิน & ของหรอยเมืองลุง</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label><i class="fa-regular fa-calendar-days"></i> ระยะเวลาของทริป</label>
+                            <select id="tripDuration" required>
+                                <option value="1">1 วัน (One Day Trip ด่วนจี๋)</option>
+                                <option value="2" selected>2 วัน 1 คืน (ทริปมาตรฐานยอดฮิต)</option>
+                                <option value="3">3 วัน 2 คืน (เก็บครบทุกไฮไลต์)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-users"></i> กลุ่มผู้ร่วมเดินทาง</label>
+                            <select id="tripCompanion">
+                                <option value="couple">❤️ คู่รัก / คนรู้ใจ</option>
+                                <option value="friends">👯‍♂️ กลุ่มเพื่อนสนิท</option>
+                                <option value="family">👨‍👩‍👧‍👦 ครอบครัว (มีเด็ก/ผู้ใหญ่)</option>
+                                <option value="solo">🎒 ลุยเดี่ยว (Solo Traveler)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-car"></i> ยานพาหนะหลัก</label>
+                            <select id="tripVehicle">
+                                <option value="car">🚗 รถยนต์ส่วนบุคคล / รถเช่า</option>
+                                <option value="motorbike">🛵 รถจักรยานยนต์</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-glow btn-block" id="btnAiGenerate">
+                        <i class="fa-solid fa-microchip"></i> ให้ AI ประมวลผลและสร้างแผนการเดินทางทันที
+                    </button>
+                </form>
+            </div>
+
+            <!-- AI Result Area -->
+            <div id="aiResultArea" class="ai-result-card" style="display: none;">
+                
+                <div class="ai-summary-header">
+                    <div>
+                        <span class="ai-badge-sm"><i class="fa-solid fa-sparkles"></i> AI Generated Itinerary & Map Route</span>
+                        <h2 id="resultTitle" class="mt-2">เส้นทางท่องเที่ยวพัทลุงฉบับเฉพาะคุณ</h2>
+                        <p id="resultDesc" class="text-muted"></p>
+                    </div>
+                    <div class="ai-tags" id="resultTags"></div>
+                </div>
+
+                <div class="map-card-container">
+                    <div class="map-card-header">
+                        <div class="header-title-group">
+                            <i class="fa-solid fa-map-location-dot" style="color: #10b981;"></i>
+                            <span>แผนที่เส้นทางท่องเที่ยว (เรียงตามลำดับทริป)</span>
+                        </div>
+                        <div class="header-stats-group">
+                            <span class="stat-pill"><i class="fa-solid fa-location-dot"></i> จุดแวะ: <b id="aiStopCount">3</b> จุด</span>
+                            <span class="stat-pill"><i class="fa-solid fa-road"></i> ระยะทางถนนรวม: <b id="aiTotalDistance">8.3 กม.</b></span>
+                        </div>
+                    </div>
+
+                    <div class="map-wrapper-relative">
+                        <div id="aiRouteMap" class="ai-map-canvas"></div>
+                        
+                        <div class="map-floating-controls">
+                            <button type="button" class="btn-map-control" onclick="locateUserPosition()" title="พิกัดตำแหน่งจริงของคุณ">
+                                <i class="fa-solid fa-crosshairs"></i> ตำแหน่งของฉัน
+                            </button>
+                            <button type="button" class="btn-map-control" onclick="resetAiMapView()" title="จัดมุมมองให้พอดีเส้นทาง">
+                                <i class="fa-solid fa-expand"></i> ดูเส้นทางทั้งหมด
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="timelineContainer" class="timeline-box"></div>
+
+                <div class="ai-action-bar">
+                    <div class="ai-tip-text">
+                        <strong><i class="fa-solid fa-lightbulb text-warning"></i> ข้อแนะนำจาก AI:</strong>
+                        <p id="aiTips"></p>
+                    </div>
+                    <div style="display: flex; gap: 0.75rem;">
+                        <button onclick="window.print()" class="btn btn-outline"><i class="fa-solid fa-print"></i> พิมพ์ / บันทึก PDF</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preset Curated Routes -->
+            <div class="mt-5">
+                <div class="section-heading-row">
+                    <div>
+                        <span class="sub-heading">Curated Routes</span>
+                        <h2 class="main-heading">เส้นทางตัวอย่าง <em class="text-accent">ยอดนิยมตลอดกาล</em></h2>
+                    </div>
+                </div>
+                <div class="preset-routes-grid">
+                    <div class="preset-card" onclick="loadPreset('adventure', 1)">
+                        <div class="preset-img" style="background-image: url('https://images.unsplash.com/photo-1530866495561-507c9faab2ed?auto=format&fit=crop&w=600&q=80');">
+                            <span class="preset-badge">1 วันเต็ม</span>
+                        </div>
+                        <div class="preset-body">
+                            <h4>สายลุย ล่องแก่งหนานมดแดง & บ้านนาวง</h4>
+                            <p>พายคายัคสายน้ำใส น้ำตกหนานหรูด และอ่างห้วยน้ำใส</p>
+                            <span class="btn-text">โหลดแผนนี้ใน AI <i class="fa-solid fa-arrow-right"></i></span>
+                        </div>
+                    </div>
+                    <div class="preset-card" onclick="loadPreset('nature', 2)">
+                        <div class="preset-img" style="background-image: url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80');">
+                            <span class="preset-badge">2 วัน 1 คืน</span>
+                        </div>
+                        <div class="preset-body">
+                            <h4>มนต์เสน่ห์คลองปากประ & ทะเลน้อย</h4>
+                            <p>ล่องเรือยอยักษ์ ทะเลบัวแดง และสะพานเอกชัย</p>
+                            <span class="btn-text">โหลดแผนนี้ใน AI <i class="fa-solid fa-arrow-right"></i></span>
+                        </div>
+                    </div>
+                    <div class="preset-card" onclick="loadPreset('chill', 2)">
+                        <div class="preset-img" style="background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80');">
+                            <span class="preset-badge">2 วัน 1 คืน</span>
+                        </div>
+                        <div class="preset-body">
+                            <h4>ทะเลหมอกควนนกเต้น & นาโปแก</h4>
+                            <p>จิบกาแฟชมทะเลหมอก ถ่ายรูปสะพานไม้กลางทุ่งนา</p>
+                            <span class="btn-text">โหลดแผนนี้ใน AI <i class="fa-solid fa-arrow-right"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="brand-logo">
+                        <div class="logo-icon"><i class="fa-solid fa-mountain-sun"></i></div>
+                        <div class="logo-text">
+                            <strong>พัทลุงไกด์</strong>
+                            <span>AI Travel Guide</span>
+                        </div>
+                    </div>
+                    <p>ท่องพัทลุงในมุมมองใหม่ ด้วยระบบจำลองปัญญาประดิษฐ์ (AI) แผนที่เส้นทางจริง และระบบฐานข้อมูลคลาวด์ Firebase</p>
+                    <div class="footer-badges">
+                        <span><i class="fa-solid fa-shield-check"></i> ข้อมูลปี 2026</span>
+                        <span><i class="fa-solid fa-database"></i> Firebase Realtime DB</span>
+                        <span><i class="fa-solid fa-location-crosshairs"></i> Live GPS Tracking</span>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>เมนูหลัก</h4>
+                    <ul>
+                        <li><a href="index.html"><i class="fa-solid fa-angle-right"></i> หน้าแรก</a></li>
+                        <li><a href="categories.html"><i class="fa-solid fa-angle-right"></i> หมวดหมู่สถานที่</a></li>
+                        <li><a href="places.html"><i class="fa-solid fa-angle-right"></i> สถานที่ท่องเที่ยว (30 แห่ง)</a></li>
+                        <li><a href="ai.html"><i class="fa-solid fa-angle-right"></i> AI แนะนำแผนการท่องเที่ยว</a></li>
+                        <li><a href="admin.html"><i class="fa-solid fa-angle-right"></i> ระบบหลังบ้าน Back Office</a></li>
+                    </ul>
+                </div>
+                <div class="footer-categories">
+                    <h4>หมวดหมู่ยอดฮิต</h4>
+                    <ul>
+                        <li><a href="places.html?cat=nature"><i class="fa-solid fa-leaf"></i> ธรรมชาติ & ทะเลสาบ</a></li>
+                        <li><a href="places.html?cat=adventure"><i class="fa-solid fa-person-hiking"></i> ล่องแก่ง & ผจญภัย</a></li>
+                        <li><a href="places.html?cat=culture"><i class="fa-solid fa-landmark"></i> ประวัติศาสตร์ & ศรัทธา</a></li>
+                        <li><a href="places.html?cat=food"><i class="fa-solid fa-utensils"></i> อาหาร & คาเฟ่</a></li>
+                        <li><a href="places.html?cat=family"><i class="fa-solid fa-people-roof"></i> ครอบครัว & วิถีชุมชน</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>ติดต่อ & แหล่งข้อมูล</h4>
+                    <p><i class="fa-solid fa-envelope"></i> contact@phatthalung-ai.travel</p>
+                    <p><i class="fa-solid fa-location-dot"></i> จังหวัดพัทลุง ภาคใต้ ประเทศไทย</p>
+                    <p><i class="fa-solid fa-shield-halved"></i> รหัสแอดมินค่าเริ่มต้น: <strong>1234</strong></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Phatthalung AI Travel Planner. พัฒนาขึ้นเพื่อส่งเสริมและยกระดับการท่องเที่ยวจังหวัดพัทลุง</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase App & Realtime Database SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
+    <!-- Leaflet JS & App Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
