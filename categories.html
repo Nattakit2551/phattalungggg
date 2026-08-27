@@ -3,190 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>หมวดหมู่ท่องเที่ยว - พัทลุงไกด์ AI</title>
+    <meta name="description" content="เลือกสถานที่ท่องเที่ยวพัทลุงตามหมวดหมู่ที่สนใจ">
+    <title>หมวดหมู่การเดินทาง — พัทลุงไกด์</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Trirong:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="">
-    
+<body>
     <header class="navbar-wrapper">
         <div class="nav-container">
             <a href="index.html" class="brand-logo">
                 <div class="logo-icon"><i class="fa-solid fa-mountain-sun"></i></div>
                 <div class="logo-text">
                     <strong>พัทลุงไกด์</strong>
-                    <span>AI Travel Planner</span>
+                    <span>Phatthalung</span>
                 </div>
             </a>
             <nav class="nav-links">
-                <a href="index.html" class="">หน้าแรก</a>
+                <a href="index.html">หน้าแรก</a>
                 <a href="categories.html" class="active">หมวดหมู่</a>
-                <a href="places.html" class="">สถานที่</a>
-                <a href="ai.html" class="">AI แนะนำ</a>
-                <a href="about.html" class="">เกี่ยวกับ</a>
+                <a href="places.html">สถานที่</a>
+                <a href="ai.html">วางแผนด้วย AI</a>
+                <a href="navigation.html">แผนที่นำทาง</a>
+                <a href="about.html">เกี่ยวกับ</a>
             </nav>
             <div class="nav-actions">
-                <a href="ai.html" class="btn-ai-nav"><i class="fa-solid fa-wand-magic-sparkles"></i> <span>ให้ AI จัดทริป</span></a>
+                <a href="ai.html" class="btn-ai-nav"><i class="fa-solid fa-wand-magic-sparkles"></i> <span>จัดทริปให้ฉัน</span></a>
                 <div id="navUserArea">
                     <a href="login.html" class="btn-login-pill">
                         <i class="fa-solid fa-arrow-right-to-bracket"></i>
                         <span>เข้าสู่ระบบ</span>
                     </a>
                 </div>
-                <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle Menu"><i class="fa-solid fa-bars"></i></button>
+                <button class="mobile-toggle" id="mobileToggle" aria-label="เปิดเมนู"><i class="fa-solid fa-bars"></i></button>
             </div>
         </div>
         <div class="mobile-nav" id="mobileNav">
-            <a href="index.html" class="">หน้าแรก</a>
+            <a href="index.html">หน้าแรก</a>
             <a href="categories.html" class="active">หมวดหมู่</a>
-            <a href="places.html" class="">สถานที่</a>
-            <a href="ai.html" class="">AI แนะนำ</a>
-            <a href="about.html" class="">เกี่ยวกับ</a>
-            <a href="ai.html" class="mobile-ai-link"><i class="fa-solid fa-wand-magic-sparkles"></i> ให้ AI จัดทริป</a>
-            <a href="login.html" class="mobile-login-link mobile-ai-link"><i class="fa-solid fa-arrow-right-to-bracket"></i> เข้าสู่ระบบ</a>
-            <a href="profile.html" class="mobile-profile-link mobile-ai-link"><i class="fa-solid fa-user"></i> โปรไฟล์ของฉัน</a>
-            <a href="ai.html" class="mobile-ai-link"><i class="fa-solid fa-wand-magic-sparkles"></i> ให้ AI จัดทริป</a>
-            <a href="admin.html" class="mobile-admin-link"><i class="fa-solid fa-gauge-high"></i> ระบบหลังบ้าน (แอดมิน)</a>
+            <a href="places.html">สถานที่</a>
+            <a href="ai.html">วางแผนด้วย AI</a>
+            <a href="navigation.html">แผนที่นำทาง</a>
+            <a href="about.html">เกี่ยวกับ</a>
+            <a href="profile.html" class="mobile-profile-link"><i class="fa-solid fa-user"></i> โปรไฟล์ของฉัน</a>
+            <a href="favorites.html" class="mobile-fav-link"><i class="fa-solid fa-heart" style="color: var(--rose);"></i> รายการโปรด</a>
+            <a href="admin.html" class="mobile-admin-link"><i class="fa-solid fa-gauge-high"></i> ระบบหลังบ้าน</a>
         </div>
     </header>
 
-    
-    <div class="page-header">
+    <section class="page-header">
         <div class="container">
-            <span class="sub-heading">Categories</span>
-            <h1>หมวดหมู่ <em class="text-accent">การท่องเที่ยว</em></h1>
-            <p>เลือกสัมผัสเมืองลุงตามสไตล์ที่คุณชื่นชอบ ตั้งแต่ธรรมชาติอันบริสุทธิ์ไปจนถึงวิถีชุมชนอันทรงคุณค่า</p>
+            <span class="eyebrow">เลือกตามความสนใจ</span>
+            <h1>หมวดหมู่ <em>การเดินทาง</em></h1>
+            <p class="lede">แต่ละหมวดพาไปคนละอารมณ์ เลือกสักหมวดแล้วดูว่ามีอะไรรออยู่บ้าง</p>
         </div>
-    </div>
-    <section class="section py-5">
+    </section>
+
+    <section class="section-tight">
         <div class="container">
-            <div class="category-showcase-grid">
-                <div class="category-item-card">
-                    <div class="cat-image-box" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=700&q=80');">
-                        <span class="cat-count"><i class="fa-solid fa-location-dot"></i> 10 สถานที่</span>
-                    </div>
-                    <div class="cat-details">
-                        <div class="cat-icon-badge"><i class="fa-solid fa-leaf"></i></div>
-                        <h3>ธรรมชาติ & วิวทิวทัศน์</h3>
-                        <p>สัมผัสความงามของทะเลสาบสงขลา-ทะเลน้อย ป่าดิบชื้นเทือกเขาบรรทัด ทะเลหมอกควนนกเต้น และน้ำตกเย็นฉ่ำ</p>
-                        <a href="places.html?cat=nature" class="btn btn-outline"><i class="fa-solid fa-arrow-right"></i> สำรวจหมวดนี้</a>
-                    </div>
+            <div class="cat-grid">
+                <a href="places.html?cat=nature" class="cat-tile">
+                    <div class="cat-tile-icon"><i class="fa-solid fa-leaf"></i></div>
+                    <h3>ธรรมชาติ</h3>
+                    <p>พื้นที่ชุ่มน้ำโลกแห่งแรกของไทย น้ำตกในเขตเขาบรรทัด บ่อน้ำแร่ร้อน และอ่างเก็บน้ำที่ยังไม่มีใครรู้จัก</p>
+                    <p class="mt-2" style="font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--faint);">ทะเลน้อย · คลองปากประ · น้ำตกไพรวัลย์</p>
+                    <span class="cat-tile-count">12 แห่ง</span>
+                </a>
+                <a href="places.html?cat=adventure" class="cat-tile">
+                    <div class="cat-tile-icon"><i class="fa-solid fa-person-hiking"></i></div>
+                    <h3>ผจญภัย</h3>
+                    <p>พายคายัคล่องแก่งบนสายน้ำจากเขาบรรทัด นั่งเรือลอดถ้ำหินปูน และปีนขึ้นจุดชมวิวที่รถเก๋งขึ้นไม่ได้</p>
+                    <p class="mt-2" style="font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--faint);">หนานมดแดง · ถ้ำน้ำเย็น · ควนเลียบ</p>
+                    <span class="cat-tile-count">5 แห่ง</span>
+                </a>
+                <a href="places.html?cat=culture" class="cat-tile">
+                    <div class="cat-tile-icon"><i class="fa-solid fa-torii-gate"></i></div>
+                    <h3>วัฒนธรรม</h3>
+                    <p>พระบรมธาตุอายุกว่าพันปี ถ้ำที่ประดิษฐานพระพุทธรูป และตลาดชุมชนที่เปิดสัปดาห์ละวัน</p>
+                    <p class="mt-2" style="font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--faint);">วัดเขียนบางแก้ว · หลาดใต้โหนด</p>
+                    <span class="cat-tile-count">6 แห่ง</span>
+                </a>
+                <a href="places.html?cat=food" class="cat-tile">
+                    <div class="cat-tile-icon"><i class="fa-solid fa-bowl-rice"></i></div>
+                    <h3>ของกิน</h3>
+                    <p>ตลาดเย็นหน้าสถานีรถไฟที่คนพัทลุงกินจริง คาเฟ่ริมทะเลสาบ และร้านกาแฟบนเนินเขาที่ต้องนั่งรถกระบะขึ้น</p>
+                    <p class="mt-2" style="font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--faint);">ตลาดรถไฟ · HLNG Cafe</p>
+                    <span class="cat-tile-count">4 แห่ง</span>
+                </a>
+                <a href="places.html?cat=family" class="cat-tile">
+                    <div class="cat-tile-icon"><i class="fa-solid fa-children"></i></div>
+                    <h3>ครอบครัว</h3>
+                    <p>สวนกิจกรรมกลางแจ้งสำหรับเด็ก ศูนย์เรียนรู้วิถีชาวนาที่ให้อาหารควายได้ และแหล่งงานสานกระจูด</p>
+                    <p class="mt-2" style="font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--faint);">เดอลองการ์เด้น · นาโปแก</p>
+                    <span class="cat-tile-count">3 แห่ง</span>
+                </a>
+            </div>
+            <div class="rule-yor" aria-hidden="true"><svg viewBox="0 0 120 78" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <polyline points="8,74 34,10 60,40 86,10 112,74"/>
+        <polyline points="34,10 60,4 86,10"/>
+        <path d="M34 12 Q60 30 86 12"/>
+        <path d="M42 22 Q60 36 78 22"/>
+        <line x1="60" y1="4" x2="60" y2="40"/>
+        <line x1="2" y1="74" x2="118" y2="74"/>
+      </svg></div>
+            <div class="section-head">
+                <div>
+                    <span class="eyebrow">ยังเลือกไม่ถูก</span>
+                    <h2>ให้ AI ช่วยจัดตารางให้</h2>
+                    <p>บอกแค่ว่ามีกี่วันและชอบแนวไหน ระบบจะเลือกจุดแวะ เรียงลำดับตามระยะทาง และลากเส้นทางบนแผนที่ให้</p>
                 </div>
-
-                <div class="category-item-card">
-                    <div class="cat-image-box" style="background-image: url('https://images.unsplash.com/photo-1530866495561-507c9faab2ed?auto=format&fit=crop&w=700&q=80');">
-                        <span class="cat-count"><i class="fa-solid fa-location-dot"></i> 5 สถานที่</span>
-                    </div>
-                    <div class="cat-details">
-                        <div class="cat-icon-badge"><i class="fa-solid fa-person-hiking"></i></div>
-                        <h3>ผจญภัย & แอดเวนเจอร์</h3>
-                        <p>กิจกรรมสายลุย พายเรือคายัคล่องแก่งหนานมดแดง ไต่บันไดพิชิตเขาอกทะลุ และเดินป่าศึกษาธรรมชาติ</p>
-                        <a href="places.html?cat=adventure" class="btn btn-outline"><i class="fa-solid fa-arrow-right"></i> สำรวจหมวดนี้</a>
-                    </div>
-                </div>
-
-                <div class="category-item-card">
-                    <div class="cat-image-box" style="background-image: url('https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=700&q=80');">
-                        <span class="cat-count"><i class="fa-solid fa-location-dot"></i> 6 สถานที่</span>
-                    </div>
-                    <div class="cat-details">
-                        <div class="cat-icon-badge"><i class="fa-solid fa-landmark"></i></div>
-                        <h3>วัฒนธรรม & ประวัติศาสตร์</h3>
-                        <p>สืบสานมรดกทางวัฒนธรรม ถิ่นกำเนิดมโนราห์ หนังตะลุง วังเจ้าเมืองพัทลุง และวัดโบราณพันปีสำนักเขาอ้อ</p>
-                        <a href="places.html?cat=culture" class="btn btn-outline"><i class="fa-solid fa-arrow-right"></i> สำรวจหมวดนี้</a>
-                    </div>
-                </div>
-
-                <div class="category-item-card">
-                    <div class="cat-image-box" style="background-image: url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=700&q=80');">
-                        <span class="cat-count"><i class="fa-solid fa-location-dot"></i> 5 สถานที่</span>
-                    </div>
-                    <div class="cat-details">
-                        <div class="cat-icon-badge"><i class="fa-solid fa-utensils"></i></div>
-                        <h3>อาหาร & คาเฟ่</h3>
-                        <p>เช็คอินคาเฟ่กลางทุ่งนา ลิ้มลองอาหารใต้รสจัดจ้าน แกงส้มปลาลูกเบร่ ขนมสาคูต้นแท้ และสเต็กหลานตาชู</p>
-                        <a href="places.html?cat=food" class="btn btn-outline"><i class="fa-solid fa-arrow-right"></i> สำรวจหมวดนี้</a>
-                    </div>
-                </div>
-
-                <div class="category-item-card">
-                    <div class="cat-image-box" style="background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=700&q=80');">
-                        <span class="cat-count"><i class="fa-solid fa-location-dot"></i> 4 สถานที่</span>
-                    </div>
-                    <div class="cat-details">
-                        <div class="cat-icon-badge"><i class="fa-solid fa-people-roof"></i></div>
-                        <h3>ครอบครัว & วิถีชุมชน</h3>
-                        <p>พักผ่อนโฮมสเตย์ริมน้ำ เที่ยวตลาดชุมชนป่าไผ่สร้างสุข และหลาดใต้โหนดร่วมกับครอบครัว</p>
-                        <a href="places.html?cat=family" class="btn btn-outline"><i class="fa-solid fa-arrow-right"></i> สำรวจหมวดนี้</a>
-                    </div>
-                </div>
+                <a href="ai.html" class="btn btn-glow"><i class="fa-solid fa-wand-magic-sparkles"></i> เริ่มวางแผน</a>
             </div>
         </div>
     </section>
 
-
     <footer class="site-footer">
-        <div class="footer-container">
+        <div class="container">
             <div class="footer-grid">
                 <div class="footer-brand">
-                    <div class="brand-logo">
+                    <a href="index.html" class="brand-logo">
                         <div class="logo-icon"><i class="fa-solid fa-mountain-sun"></i></div>
                         <div class="logo-text">
                             <strong>พัทลุงไกด์</strong>
-                            <span>AI Travel Guide</span>
+                            <span>Phatthalung</span>
                         </div>
-                    </div>
-                    <p>ท่องพัทลุงในมุมมองใหม่ ด้วยระบบจำลองปัญญาประดิษฐ์ (AI) แผนที่เส้นทางจริง และระบบฐานข้อมูลคลาวด์ Firebase</p>
-                    <div class="footer-badges">
-                        <span><i class="fa-solid fa-shield-check"></i> ข้อมูลปี 2026</span>
-                        <span><i class="fa-solid fa-database"></i> Firebase Realtime DB</span>
-                        <span><i class="fa-solid fa-location-crosshairs"></i> Live GPS Tracking</span>
-                    </div>
+                    </a>
+                    <p>คู่มือเที่ยวพัทลุงที่รวบรวมสถานที่จริง พิกัดจริง และเวลาเปิดจริง พร้อมเครื่องมือวางแผนเส้นทางและนำทางในตัว</p>
                 </div>
-                <div class="footer-links">
-                    <h4>เมนูหลัก</h4>
-                    <ul>
-                        <li><a href="index.html"><i class="fa-solid fa-angle-right"></i> หน้าแรก</a></li>
-                        <li><a href="categories.html"><i class="fa-solid fa-angle-right"></i> หมวดหมู่สถานที่</a></li>
-                        <li><a href="places.html"><i class="fa-solid fa-angle-right"></i> สถานที่ท่องเที่ยว (30 แห่ง)</a></li>
-                        <li><a href="ai.html"><i class="fa-solid fa-angle-right"></i> AI แนะนำแผนการท่องเที่ยว</a></li>
-                        <li><a href="admin.html"><i class="fa-solid fa-angle-right"></i> ระบบหลังบ้าน Back Office</a></li>
-                    </ul>
+                <div class="footer-col">
+                    <h4>สำรวจ</h4>
+                    <a href="places.html">สถานที่ทั้งหมด</a>
+                    <a href="categories.html">แยกตามหมวดหมู่</a>
+                    <a href="ai.html">วางแผนด้วย AI</a>
+                    <a href="navigation.html">แผนที่นำทาง</a>
                 </div>
-                <div class="footer-categories">
-                    <h4>หมวดหมู่ยอดฮิต</h4>
-                    <ul>
-                        <li><a href="places.html?cat=nature"><i class="fa-solid fa-leaf"></i> ธรรมชาติ & ทะเลสาบ</a></li>
-                        <li><a href="places.html?cat=adventure"><i class="fa-solid fa-person-hiking"></i> ล่องแก่ง & ผจญภัย</a></li>
-                        <li><a href="places.html?cat=culture"><i class="fa-solid fa-landmark"></i> ประวัติศาสตร์ & ศรัทธา</a></li>
-                        <li><a href="places.html?cat=food"><i class="fa-solid fa-utensils"></i> อาหาร & คาเฟ่</a></li>
-                        <li><a href="places.html?cat=family"><i class="fa-solid fa-people-roof"></i> ครอบครัว & วิถีชุมชน</a></li>
-                    </ul>
+                <div class="footer-col">
+                    <h4>หมวดหมู่</h4>
+                    <a href="places.html?cat=nature">ธรรมชาติ</a>
+                    <a href="places.html?cat=adventure">ผจญภัย</a>
+                    <a href="places.html?cat=culture">วัฒนธรรม</a>
+                    <a href="places.html?cat=food">ของกิน</a>
                 </div>
-                <div class="footer-contact">
-                    <h4>ติดต่อ & แหล่งข้อมูล</h4>
-                    <p><i class="fa-solid fa-envelope"></i> contact@phatthalung-ai.travel</p>
-                    <p><i class="fa-solid fa-location-dot"></i> จังหวัดพัทลุง ภาคใต้ ประเทศไทย</p>
-                    <p><i class="fa-solid fa-shield-halved"></i> รหัสแอดมินค่าเริ่มต้น: <strong>1234</strong></p>
+                <div class="footer-col">
+                    <h4>บัญชี</h4>
+                    <a href="login.html">เข้าสู่ระบบ</a>
+                    <a href="register.html">สมัครสมาชิก</a>
+                    <a href="favorites.html">รายการโปรด</a>
+                    <a href="about.html">เกี่ยวกับโครงการ</a>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 Phatthalung AI Travel Planner. พัฒนาขึ้นเพื่อส่งเสริมและยกระดับการท่องเที่ยวจังหวัดพัทลุง</p>
+                <p>&copy; 2569 พัทลุงไกด์ — โครงการเพื่อส่งเสริมการท่องเที่ยวจังหวัดพัทลุง</p>
+                <span class="footer-coord">7.6250° N, 100.0917° E</span>
             </div>
         </div>
     </footer>
 
-    <!-- Firebase App & Realtime Database SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    
 
-    <!-- Leaflet JS & App Scripts -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

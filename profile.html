@@ -3,230 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>โปรไฟล์ของฉัน - พัทลุงไกด์ AI</title>
+    <meta name="description" content="จัดการข้อมูลส่วนตัว">
+    <title>โปรไฟล์ของฉัน — พัทลุงไกด์</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Trirong:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="">
-    
+<body>
     <header class="navbar-wrapper">
         <div class="nav-container">
             <a href="index.html" class="brand-logo">
                 <div class="logo-icon"><i class="fa-solid fa-mountain-sun"></i></div>
                 <div class="logo-text">
                     <strong>พัทลุงไกด์</strong>
-                    <span>AI Travel Planner</span>
+                    <span>Phatthalung</span>
                 </div>
             </a>
             <nav class="nav-links">
-                <a href="index.html" class="">หน้าแรก</a>
-                <a href="categories.html" class="">หมวดหมู่</a>
-                <a href="places.html" class="">สถานที่</a>
-                <a href="ai.html" class="">AI แนะนำ</a>
-                <a href="about.html" class="">เกี่ยวกับ</a>
+                <a href="index.html">หน้าแรก</a>
+                <a href="categories.html">หมวดหมู่</a>
+                <a href="places.html">สถานที่</a>
+                <a href="ai.html">วางแผนด้วย AI</a>
+                <a href="navigation.html">แผนที่นำทาง</a>
+                <a href="about.html">เกี่ยวกับ</a>
             </nav>
             <div class="nav-actions">
-                <a href="ai.html" class="btn-ai-nav"><i class="fa-solid fa-wand-magic-sparkles"></i> <span>ให้ AI จัดทริป</span></a>
+                <a href="ai.html" class="btn-ai-nav"><i class="fa-solid fa-wand-magic-sparkles"></i> <span>จัดทริปให้ฉัน</span></a>
                 <div id="navUserArea">
                     <a href="login.html" class="btn-login-pill">
                         <i class="fa-solid fa-arrow-right-to-bracket"></i>
                         <span>เข้าสู่ระบบ</span>
                     </a>
                 </div>
-                <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle Menu"><i class="fa-solid fa-bars"></i></button>
+                <button class="mobile-toggle" id="mobileToggle" aria-label="เปิดเมนู"><i class="fa-solid fa-bars"></i></button>
             </div>
         </div>
         <div class="mobile-nav" id="mobileNav">
-            <a href="index.html" class="">หน้าแรก</a>
-            <a href="categories.html" class="">หมวดหมู่</a>
-            <a href="places.html" class="">สถานที่</a>
-            <a href="ai.html" class="">AI แนะนำ</a>
-            <a href="about.html" class="">เกี่ยวกับ</a>
-            <a href="login.html" class="mobile-login-link mobile-ai-link"><i class="fa-solid fa-arrow-right-to-bracket"></i> เข้าสู่ระบบ</a>
-            <a href="profile.html" class="mobile-profile-link mobile-ai-link"><i class="fa-solid fa-user"></i> โปรไฟล์ของฉัน</a>
-            <a href="ai.html" class="mobile-ai-link"><i class="fa-solid fa-wand-magic-sparkles"></i> ให้ AI จัดทริป</a>
-            <a href="admin.html" class="mobile-admin-link"><i class="fa-solid fa-gauge-high"></i> ระบบหลังบ้าน (แอดมิน)</a>
+            <a href="index.html">หน้าแรก</a>
+            <a href="categories.html">หมวดหมู่</a>
+            <a href="places.html">สถานที่</a>
+            <a href="ai.html">วางแผนด้วย AI</a>
+            <a href="navigation.html">แผนที่นำทาง</a>
+            <a href="about.html">เกี่ยวกับ</a>
+            <a href="profile.html" class="mobile-profile-link"><i class="fa-solid fa-user"></i> โปรไฟล์ของฉัน</a>
+            <a href="favorites.html" class="mobile-fav-link"><i class="fa-solid fa-heart" style="color: var(--rose);"></i> รายการโปรด</a>
+            <a href="admin.html" class="mobile-admin-link"><i class="fa-solid fa-gauge-high"></i> ระบบหลังบ้าน</a>
         </div>
     </header>
 
-    
-    <div class="page-header">
+    <section class="page-header">
         <div class="container">
-            <span class="sub-heading">My Profile & Account</span>
-            <h1>โปรไฟล์ <em class="text-accent">ผู้ใช้งาน</em></h1>
-            <p>จัดการข้อมูลส่วนตัว สถานที่ท่องเที่ยวที่บันทึกไว้ และดูประวัติการวางแผนทริปท่องเที่ยวเมืองพัทลุง</p>
+            <span class="eyebrow">บัญชีของคุณ</span>
+            <h1>โปรไฟล์</h1>
         </div>
-    </div>
+    </section>
 
-    <section class="section py-5">
+    <section class="section-tight">
         <div class="container">
-            <div class="profile-layout-grid">
-                
-                <!-- Left Sidebar / Card: User Summary & Stats -->
-                <div class="profile-card profile-user-sidebar">
-                    <div class="profile-avatar-large" id="profileAvatarLarge">N</div>
-                    <h2 class="profile-user-name" id="profileDisplayName">Nattakit</h2>
-                    <p class="profile-user-email" id="profileDisplayEmail">Nattakit@gmail.com</p>
-                    <span class="badge-role"><i class="fa-solid fa-circle-check text-accent"></i> สมาชิกนักเดินทาง</span>
+            <div class="profile-layout">
+                <aside class="profile-side">
+                    <div class="profile-avatar-xl" id="profileAvatarLarge">U</div>
+                    <h2 id="profileDisplayName">ผู้ใช้งาน</h2>
+                    <p id="profileDisplayEmail">-</p>
+                    <span id="profileRoleBadge" class="badge-role-user"><i class="fa-solid fa-user"></i> สมาชิก</span>
 
-                    <div class="profile-stats-box mt-4">
-                        <div class="p-stat-item">
-                            <b id="profFavCount">0</b>
-                            <span>สถานที่โปรด</span>
-                        </div>
-                        <div class="stat-divider"></div>
-                        <div class="p-stat-item">
-                            <b id="profTripCount">2</b>
-                            <span>ทริปที่บันทึก</span>
-                        </div>
-                        <div class="stat-divider"></div>
-                        <div class="p-stat-item">
-                            <b>พัทลุง</b>
-                            <span>จังหวัด</span>
-                        </div>
+                    <div class="profile-metric">
+                        <b id="profFavCount">0</b>
+                        <span>สถานที่ในรายการโปรด</span>
                     </div>
 
-                    <div class="profile-quick-actions mt-4">
-                        <a href="places.html" class="btn btn-outline btn-block"><i class="fa-solid fa-compass"></i> สำรวจสถานที่ท่องเที่ยว</a>
-                        <a href="admin.html" id="profileAdminBtn" class="btn btn-gold btn-block mt-2" style="display: none;"><i class="fa-solid fa-gauge-high"></i> ระบบหลังบ้าน (Admin)</a>
-                        <button onclick="logoutUser()" class="btn btn-logout-danger btn-block mt-2"><i class="fa-solid fa-arrow-right-from-bracket"></i> ออกจากระบบ</button>
+                    <div class="mt-3" style="display: flex; flex-direction: column; gap: 9px;">
+                        <a href="favorites.html" class="btn btn-outline btn-sm btn-block"><i class="fa-solid fa-heart"></i> ดูรายการโปรด</a>
+                        <a href="admin.html" class="btn btn-outline btn-sm btn-block" id="profileAdminBtn" style="display: none;"><i class="fa-solid fa-gauge-high"></i> ระบบหลังบ้าน</a>
+                        <button onclick="logoutUser()" class="btn btn-outline btn-sm btn-block" style="color: var(--rose);"><i class="fa-solid fa-arrow-right-from-bracket"></i> ออกจากระบบ</button>
                     </div>
-                </div>
+                </aside>
 
-                <!-- Right Content: Edit Profile & Favorite Places List -->
-                <div class="profile-main-area">
-                    
-                    <!-- Edit Profile Form Card -->
-                    <div class="profile-card mb-4">
-                        <div class="card-head">
-                            <h2><i class="fa-solid fa-user-pen text-accent"></i> แก้ไขข้อมูลส่วนตัว</h2>
-                            <p>อัปเดตชื่อแสดงผล ข้อมูลติดต่อ และเบอร์โทรศัพท์ของคุณ</p>
-                        </div>
-                        <form id="editProfileForm" onsubmit="handleProfileUpdate(event)">
-                            <div class="form-grid">
+                <div>
+                    <div class="panel">
+                        <h2>ข้อมูลส่วนตัว</h2>
+                        <p>แก้ไขแล้วกดบันทึก ข้อมูลเก็บไว้ในเบราว์เซอร์นี้เท่านั้น</p>
+
+                        <form onsubmit="handleProfileUpdate(event)">
+                            <div class="form-row">
                                 <div class="form-group">
-                                    <label><i class="fa-solid fa-signature"></i> ชื่อ-นามสกุล / ชื่อเล่น</label>
-                                    <input type="text" id="profInputName" required placeholder="กรอกชื่อของคุณ">
+                                    <label for="profInputName"><i class="fa-regular fa-user"></i> ชื่อที่ใช้แสดง</label>
+                                    <input type="text" id="profInputName" placeholder="ชื่อของคุณ">
                                 </div>
                                 <div class="form-group">
-                                    <label><i class="fa-solid fa-envelope"></i> อีเมล</label>
-                                    <input type="email" id="profInputEmail" required placeholder="example@email.com">
-                                </div>
-                            </div>
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label><i class="fa-solid fa-phone"></i> เบอร์โทรศัพท์</label>
-                                    <input type="tel" id="profInputPhone" placeholder="08x-xxx-xxxx">
+                                    <label for="profInputEmail"><i class="fa-regular fa-envelope"></i> อีเมล</label>
+                                    <input type="email" id="profInputEmail" placeholder="you@example.com">
                                 </div>
                                 <div class="form-group">
-                                    <label><i class="fa-solid fa-location-dot"></i> จังหวัด / ที่อยู่</label>
-                                    <input type="text" id="profInputLocation" placeholder="เช่น เมืองพัทลุง, พัทลุง">
+                                    <label for="profInputPhone"><i class="fa-solid fa-phone"></i> เบอร์โทรศัพท์</label>
+                                    <input type="tel" id="profInputPhone" placeholder="0xx-xxx-xxxx">
+                                </div>
+                                <div class="form-group">
+                                    <label for="profInputLocation"><i class="fa-solid fa-location-dot"></i> จังหวัดที่อยู่</label>
+                                    <input type="text" id="profInputLocation" placeholder="เช่น พัทลุง">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label><i class="fa-solid fa-pen-nib"></i> คำอธิบายโปรไฟล์สั้นๆ (Bio)</label>
-                                <textarea id="profInputBio" rows="2" placeholder="ชอบท่องเที่ยวธรรมชาติ ภูเขา และทะเลน้อย..."></textarea>
+                                <label for="profInputBio"><i class="fa-regular fa-comment"></i> แนะนำตัวสั้นๆ</label>
+                                <textarea id="profInputBio" placeholder="ชอบเที่ยวแบบไหน อยากไปที่ไหนต่อ"></textarea>
                             </div>
-                            <div style="display: flex; justify-content: flex-end; margin-top: 1rem;">
-                                <button type="submit" class="btn btn-glow"><i class="fa-solid fa-floppy-disk"></i> บันทึกข้อมูลโปรไฟล์</button>
-                            </div>
+                            <button type="submit" class="btn btn-glow"><i class="fa-solid fa-floppy-disk"></i> บันทึกการเปลี่ยนแปลง</button>
                         </form>
                     </div>
-
-                    <!-- Favorite Places Section -->
-                    <div class="profile-card">
-                        <div class="card-head">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <div>
-                                    <h2><i class="fa-solid fa-heart" style="color: #ef4444;"></i> รายการสถานที่โปรดของคุณ (<span id="favListCount">0</span>)</h2>
-                                    <p>สถานที่ท่องเที่ยวในพัทลุงที่คุณกดบันทึกไว้</p>
-                                </div>
-                                <a href="places.html" class="btn-link"><i class="fa-solid fa-plus"></i> เพิ่มสถานที่</a>
-                            </div>
-                        </div>
-                        <div id="profileFavoritesGrid" class="cards-grid">
-                            <!-- Rendered dynamically -->
-                        </div>
-                    </div>
-
                 </div>
-
             </div>
         </div>
     </section>
 
-    <!-- Modal Detail for Places -->
-    <div class="modal-backdrop" id="placeModal" onclick="closeModal(event)">
-        <div class="modal-box" onclick="event.stopPropagation()">
-            <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
-            <div id="modalContent"></div>
-        </div>
-    </div>
-
-
     <footer class="site-footer">
-        <div class="footer-container">
+        <div class="container">
             <div class="footer-grid">
                 <div class="footer-brand">
-                    <div class="brand-logo">
+                    <a href="index.html" class="brand-logo">
                         <div class="logo-icon"><i class="fa-solid fa-mountain-sun"></i></div>
                         <div class="logo-text">
                             <strong>พัทลุงไกด์</strong>
-                            <span>AI Travel Guide</span>
+                            <span>Phatthalung</span>
                         </div>
-                    </div>
-                    <p>ท่องพัทลุงในมุมมองใหม่ ด้วยระบบจำลองปัญญาประดิษฐ์ (AI) แผนที่เส้นทางจริง และระบบฐานข้อมูลคลาวด์ Firebase</p>
-                    <div class="footer-badges">
-                        <span><i class="fa-solid fa-shield-check"></i> ข้อมูลปี 2026</span>
-                        <span><i class="fa-solid fa-database"></i> Firebase Realtime DB</span>
-                        <span><i class="fa-solid fa-location-crosshairs"></i> Live GPS Tracking</span>
-                    </div>
+                    </a>
+                    <p>คู่มือเที่ยวพัทลุงที่รวบรวมสถานที่จริง พิกัดจริง และเวลาเปิดจริง พร้อมเครื่องมือวางแผนเส้นทางและนำทางในตัว</p>
                 </div>
-                <div class="footer-links">
-                    <h4>เมนูหลัก</h4>
-                    <ul>
-                        <li><a href="index.html"><i class="fa-solid fa-angle-right"></i> หน้าแรก</a></li>
-                        <li><a href="categories.html"><i class="fa-solid fa-angle-right"></i> หมวดหมู่สถานที่</a></li>
-                        <li><a href="places.html"><i class="fa-solid fa-angle-right"></i> สถานที่ท่องเที่ยว (30 แห่ง)</a></li>
-                        <li><a href="ai.html"><i class="fa-solid fa-angle-right"></i> AI แนะนำแผนการท่องเที่ยว</a></li>
-                        <li><a href="profile.html"><i class="fa-solid fa-angle-right"></i> โปรไฟล์ผู้ใช้งาน</a></li>
-                        <li><a href="admin.html"><i class="fa-solid fa-angle-right"></i> ระบบหลังบ้าน Back Office</a></li>
-                    </ul>
+                <div class="footer-col">
+                    <h4>สำรวจ</h4>
+                    <a href="places.html">สถานที่ทั้งหมด</a>
+                    <a href="categories.html">แยกตามหมวดหมู่</a>
+                    <a href="ai.html">วางแผนด้วย AI</a>
+                    <a href="navigation.html">แผนที่นำทาง</a>
                 </div>
-                <div class="footer-categories">
-                    <h4>หมวดหมู่ยอดฮิต</h4>
-                    <ul>
-                        <li><a href="places.html?cat=nature"><i class="fa-solid fa-leaf"></i> ธรรมชาติ & ทะเลสาบ</a></li>
-                        <li><a href="places.html?cat=adventure"><i class="fa-solid fa-person-hiking"></i> ล่องแก่ง & ผจญภัย</a></li>
-                        <li><a href="places.html?cat=culture"><i class="fa-solid fa-landmark"></i> ประวัติศาสตร์ & ศรัทธา</a></li>
-                        <li><a href="places.html?cat=food"><i class="fa-solid fa-utensils"></i> อาหาร & คาเฟ่</a></li>
-                        <li><a href="places.html?cat=family"><i class="fa-solid fa-people-roof"></i> ครอบครัว & วิถีชุมชน</a></li>
-                    </ul>
+                <div class="footer-col">
+                    <h4>หมวดหมู่</h4>
+                    <a href="places.html?cat=nature">ธรรมชาติ</a>
+                    <a href="places.html?cat=adventure">ผจญภัย</a>
+                    <a href="places.html?cat=culture">วัฒนธรรม</a>
+                    <a href="places.html?cat=food">ของกิน</a>
                 </div>
-                <div class="footer-contact">
-                    <h4>ติดต่อ & แหล่งข้อมูล</h4>
-                    <p><i class="fa-solid fa-envelope"></i> contact@phatthalung-ai.travel</p>
-                    <p><i class="fa-solid fa-location-dot"></i> จังหวัดพัทลุง ภาคใต้ ประเทศไทย</p>
-                    <p><i class="fa-solid fa-shield-halved"></i> รหัสแอดมินค่าเริ่มต้น: <strong>1234</strong></p>
+                <div class="footer-col">
+                    <h4>บัญชี</h4>
+                    <a href="login.html">เข้าสู่ระบบ</a>
+                    <a href="register.html">สมัครสมาชิก</a>
+                    <a href="favorites.html">รายการโปรด</a>
+                    <a href="about.html">เกี่ยวกับโครงการ</a>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 Phatthalung AI Travel Planner. พัฒนาขึ้นเพื่อส่งเสริมและยกระดับการท่องเที่ยวจังหวัดพัทลุง</p>
+                <p>&copy; 2569 พัทลุงไกด์ — โครงการเพื่อส่งเสริมการท่องเที่ยวจังหวัดพัทลุง</p>
+                <span class="footer-coord">7.6250° N, 100.0917° E</span>
             </div>
         </div>
     </footer>
 
-    <!-- Firebase App & Realtime Database SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    
 
-    <!-- Leaflet JS & App Scripts -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

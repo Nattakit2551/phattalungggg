@@ -3,159 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>เกี่ยวกับเรา - พัทลุงไกด์ AI</title>
+    <meta name="description" content="ที่มาและข้อจำกัดของเว็บพัทลุงไกด์">
+    <title>เกี่ยวกับโครงการ — พัทลุงไกด์</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Trirong:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="">
-    
+<body>
     <header class="navbar-wrapper">
         <div class="nav-container">
             <a href="index.html" class="brand-logo">
                 <div class="logo-icon"><i class="fa-solid fa-mountain-sun"></i></div>
                 <div class="logo-text">
                     <strong>พัทลุงไกด์</strong>
-                    <span>AI Travel Planner</span>
+                    <span>Phatthalung</span>
                 </div>
             </a>
             <nav class="nav-links">
-                <a href="index.html" class="">หน้าแรก</a>
-                <a href="categories.html" class="">หมวดหมู่</a>
-                <a href="places.html" class="">สถานที่</a>
-                <a href="ai.html" class="">AI แนะนำ</a>
+                <a href="index.html">หน้าแรก</a>
+                <a href="categories.html">หมวดหมู่</a>
+                <a href="places.html">สถานที่</a>
+                <a href="ai.html">วางแผนด้วย AI</a>
+                <a href="navigation.html">แผนที่นำทาง</a>
                 <a href="about.html" class="active">เกี่ยวกับ</a>
             </nav>
             <div class="nav-actions">
-                <a href="ai.html" class="btn-ai-nav"><i class="fa-solid fa-wand-magic-sparkles"></i> <span>ให้ AI จัดทริป</span></a>
+                <a href="ai.html" class="btn-ai-nav"><i class="fa-solid fa-wand-magic-sparkles"></i> <span>จัดทริปให้ฉัน</span></a>
                 <div id="navUserArea">
                     <a href="login.html" class="btn-login-pill">
                         <i class="fa-solid fa-arrow-right-to-bracket"></i>
                         <span>เข้าสู่ระบบ</span>
                     </a>
                 </div>
-                <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle Menu"><i class="fa-solid fa-bars"></i></button>
+                <button class="mobile-toggle" id="mobileToggle" aria-label="เปิดเมนู"><i class="fa-solid fa-bars"></i></button>
             </div>
         </div>
         <div class="mobile-nav" id="mobileNav">
-            <a href="index.html" class="">หน้าแรก</a>
-            <a href="categories.html" class="">หมวดหมู่</a>
-            <a href="places.html" class="">สถานที่</a>
-            <a href="ai.html" class="">AI แนะนำ</a>
+            <a href="index.html">หน้าแรก</a>
+            <a href="categories.html">หมวดหมู่</a>
+            <a href="places.html">สถานที่</a>
+            <a href="ai.html">วางแผนด้วย AI</a>
+            <a href="navigation.html">แผนที่นำทาง</a>
             <a href="about.html" class="active">เกี่ยวกับ</a>
-            <a href="ai.html" class="mobile-ai-link"><i class="fa-solid fa-wand-magic-sparkles"></i> ให้ AI จัดทริป</a>
-            <a href="login.html" class="mobile-login-link mobile-ai-link"><i class="fa-solid fa-arrow-right-to-bracket"></i> เข้าสู่ระบบ</a>
-            <a href="profile.html" class="mobile-profile-link mobile-ai-link"><i class="fa-solid fa-user"></i> โปรไฟล์ของฉัน</a>
-            <a href="ai.html" class="mobile-ai-link"><i class="fa-solid fa-wand-magic-sparkles"></i> ให้ AI จัดทริป</a>
-            <a href="admin.html" class="mobile-admin-link"><i class="fa-solid fa-gauge-high"></i> ระบบหลังบ้าน (แอดมิน)</a>
+            <a href="profile.html" class="mobile-profile-link"><i class="fa-solid fa-user"></i> โปรไฟล์ของฉัน</a>
+            <a href="favorites.html" class="mobile-fav-link"><i class="fa-solid fa-heart" style="color: var(--rose);"></i> รายการโปรด</a>
+            <a href="admin.html" class="mobile-admin-link"><i class="fa-solid fa-gauge-high"></i> ระบบหลังบ้าน</a>
         </div>
     </header>
 
-    
-    <div class="page-header">
+    <section class="page-header">
         <div class="container">
-            <span class="sub-heading">About Project</span>
-            <h1>เกี่ยวกับ <em class="text-accent">พัทลุงไกด์ AI</em></h1>
-            <p>แพลตฟอร์มแนะนำและจัดแผนการท่องเที่ยวเมืองพัทลุงอัจฉริยะ ยกระดับการเดินทางสู่ภาคใต้ด้วยเทคโนโลยีเว็บสมัยใหม่และระบบคลาวด์ Firebase</p>
+            <span class="eyebrow">เกี่ยวกับโครงการ</span>
+            <h1>ทำไมต้องเป็น <em>พัทลุง</em></h1>
+            <p class="lede">เว็บนี้สร้างขึ้นเพื่อรวบรวมข้อมูลท่องเที่ยวพัทลุงที่ถูกต้องและใช้งานได้จริง ไม่ใช่แค่รายชื่อสถานที่</p>
         </div>
-    </div>
-    <section class="section py-5">
+    </section>
+
+    <section class="section-tight">
         <div class="container">
-            <div class="about-grid">
-                <div class="about-card">
-                    <div class="about-icon"><i class="fa-solid fa-bullseye"></i></div>
-                    <h3>เป้าหมายของโครงการ</h3>
-                    <p>เพื่อส่งเสริมการท่องเที่ยวจังหวัดพัทลุง ทั้งสถานที่ท่องเที่ยวยอดนิยมและแหล่งท่องเที่ยวชุมชนที่ยังคงความเป็นธรรมชาติและเอกลักษณ์วัฒนธรรมปักษ์ใต้แท้ๆ</p>
+            <div class="panel">
+                <h2>ปัญหาที่อยากแก้</h2>
+                <p style="margin-bottom: 0;">ข้อมูลท่องเที่ยวพัทลุงบนอินเทอร์เน็ตกระจัดกระจาย พิกัดหลายแห่งผิด บางที่ปิดไปแล้วแต่ยังมีคนแนะนำอยู่ และแทบไม่มีที่ไหนบอกว่าสถานที่เปิดวันไหนบ้าง ทั้งที่ตลาดชุมชนหลายแห่งเปิดแค่สัปดาห์ละวัน คนขับรถไปถึงแล้วเจอประตูปิดจึงเกิดขึ้นบ่อย</p>
+            </div>
+
+            <div class="cat-grid mt-3">
+                <div class="cat-tile" style="cursor: default;">
+                    <div class="cat-tile-icon"><i class="fa-solid fa-location-crosshairs"></i></div>
+                    <h3>พิกัดที่ตรวจแล้ว</h3>
+                    <p>ทุกพิกัดตรวจสอบกับฐานข้อมูลแผนที่ ไม่ใช่กะเอาจากชื่อตำบล กดนำทางแล้วไปถึงจริง</p>
                 </div>
-                <div class="about-card">
-                    <div class="about-icon"><i class="fa-solid fa-database"></i></div>
-                    <h3>เชื่อมต่อ Realtime Firebase</h3>
-                    <p>ซิงค์ข้อมูลสถานที่ท่องเที่ยว รายการโปรด และการจัดการระบบหลังบ้านแบบสดๆ แบบเรียลไทม์</p>
+                <div class="cat-tile" style="cursor: default;">
+                    <div class="cat-tile-icon"><i class="fa-regular fa-clock"></i></div>
+                    <h3>เวลาเปิดจริง</h3>
+                    <p>ระบุวันและเวลาทำการของทุกแห่ง รวมถึงที่ที่เปิดเฉพาะวันอาทิตย์หรือเสาร์-อาทิตย์</p>
                 </div>
-                <div class="about-card">
-                    <div class="about-icon"><i class="fa-solid fa-microchip"></i></div>
-                    <h3>ขับเคลื่อนด้วย AI</h3>
-                    <p>ระบบออกแบบเส้นทางช่วยคำนวณระยะเวลา ช่วงเวลาที่เหมาะสมในแต่ละวัน เพื่อให้ผู้เดินทางได้รับประสบการณ์ที่ดีที่สุด</p>
+                <div class="cat-tile" style="cursor: default;">
+                    <div class="cat-tile-icon"><i class="fa-solid fa-route"></i></div>
+                    <h3>เส้นทางถนนจริง</h3>
+                    <p>แผนที่ลากเส้นตามถนนจริงพร้อมคำนวณระยะทางและเวลา ไม่ใช่ลากเส้นตรงข้ามภูเขา</p>
+                </div>
+                <div class="cat-tile" style="cursor: default;">
+                    <div class="cat-tile-icon"><i class="fa-solid fa-circle-exclamation"></i></div>
+                    <h3>บอกตามตรง</h3>
+                    <p>ที่ไหนถนนชันรถเก๋งขึ้นไม่ได้ ที่ไหนไม่มีห้องน้ำ ที่ไหนคะแนนรีวิวไม่สูง เราเขียนไว้ตรงๆ</p>
                 </div>
             </div>
-            <div class="story-box mt-5">
-                <div class="story-content">
-                    <h2>มนต์เสน่ห์เมืองลุง ดินแดนแห่งขุนเขาและสายนที</h2>
-                    <p>พัทลุงเป็นจังหวัดที่มีความอุดมสมบูรณ์ทางธรรมชาติ ทั้งเทือกเขาบรรทัดอันเขียวขจีทางทิศตะวันตก และทะเลสาบสงขลาตอนบน (ทะเลน้อย) ทางทิศตะวันออก มีประวัติศาสตร์อันยาวนาน เป็นแหล่งกำเนิดศิลปวัฒนธรรมการแสดงมโนราห์และหนังตะลุงของภาคใต้</p>
-                    <div class="story-tags">
-                        <span>#เที่ยวพัทลุง</span>
-                        <span>#ทะเลน้อย</span>
-                        <span>#คลองปากประ</span>
-                        <span>#ควนนกเต้น</span>
-                        <span>#หลาดใต้โหนด</span>
-                    </div>
-                </div>
+
+            <div class="rule-yor" aria-hidden="true"><svg viewBox="0 0 120 78" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <polyline points="8,74 34,10 60,40 86,10 112,74"/>
+        <polyline points="34,10 60,4 86,10"/>
+        <path d="M34 12 Q60 30 86 12"/>
+        <path d="M42 22 Q60 36 78 22"/>
+        <line x1="60" y1="4" x2="60" y2="40"/>
+        <line x1="2" y1="74" x2="118" y2="74"/>
+      </svg></div>
+
+            <div class="panel">
+                <h2>ข้อจำกัดที่ควรรู้</h2>
+                <p style="margin-bottom: 16px;">เพื่อความโปร่งใส นี่คือสิ่งที่เว็บนี้ยังทำไม่ได้</p>
+                <ul style="display: flex; flex-direction: column; gap: 12px;">
+                    <li style="display: flex; gap: 12px; font-size: 0.9rem; color: var(--sub);">
+                        <i class="fa-solid fa-image" style="color: var(--gold); margin-top: 5px;"></i>
+                        <span>รูปภาพยังเป็นภาพประกอบจากคลังภาพ ไม่ใช่ภาพถ่ายของสถานที่จริง</span>
+                    </li>
+                    <li style="display: flex; gap: 12px; font-size: 0.9rem; color: var(--sub);">
+                        <i class="fa-solid fa-database" style="color: var(--gold); margin-top: 5px;"></i>
+                        <span>ข้อมูลบัญชีและรายการโปรดเก็บไว้ในเบราว์เซอร์ ไม่ตามไปเครื่องอื่น</span>
+                    </li>
+                    <li style="display: flex; gap: 12px; font-size: 0.9rem; color: var(--sub);">
+                        <i class="fa-regular fa-calendar-xmark" style="color: var(--gold); margin-top: 5px;"></i>
+                        <span>เวลาเปิดปิดอาจเปลี่ยนได้ ควรโทรเช็คก่อนเดินทางไกล โดยเฉพาะช่วงวันหยุดยาว</span>
+                    </li>
+                </ul>
             </div>
         </div>
     </section>
 
-
     <footer class="site-footer">
-        <div class="footer-container">
+        <div class="container">
             <div class="footer-grid">
                 <div class="footer-brand">
-                    <div class="brand-logo">
+                    <a href="index.html" class="brand-logo">
                         <div class="logo-icon"><i class="fa-solid fa-mountain-sun"></i></div>
                         <div class="logo-text">
                             <strong>พัทลุงไกด์</strong>
-                            <span>AI Travel Guide</span>
+                            <span>Phatthalung</span>
                         </div>
-                    </div>
-                    <p>ท่องพัทลุงในมุมมองใหม่ ด้วยระบบจำลองปัญญาประดิษฐ์ (AI) แผนที่เส้นทางจริง และระบบฐานข้อมูลคลาวด์ Firebase</p>
-                    <div class="footer-badges">
-                        <span><i class="fa-solid fa-shield-check"></i> ข้อมูลปี 2026</span>
-                        <span><i class="fa-solid fa-database"></i> Firebase Realtime DB</span>
-                        <span><i class="fa-solid fa-location-crosshairs"></i> Live GPS Tracking</span>
-                    </div>
+                    </a>
+                    <p>คู่มือเที่ยวพัทลุงที่รวบรวมสถานที่จริง พิกัดจริง และเวลาเปิดจริง พร้อมเครื่องมือวางแผนเส้นทางและนำทางในตัว</p>
                 </div>
-                <div class="footer-links">
-                    <h4>เมนูหลัก</h4>
-                    <ul>
-                        <li><a href="index.html"><i class="fa-solid fa-angle-right"></i> หน้าแรก</a></li>
-                        <li><a href="categories.html"><i class="fa-solid fa-angle-right"></i> หมวดหมู่สถานที่</a></li>
-                        <li><a href="places.html"><i class="fa-solid fa-angle-right"></i> สถานที่ท่องเที่ยว (30 แห่ง)</a></li>
-                        <li><a href="ai.html"><i class="fa-solid fa-angle-right"></i> AI แนะนำแผนการท่องเที่ยว</a></li>
-                        <li><a href="admin.html"><i class="fa-solid fa-angle-right"></i> ระบบหลังบ้าน Back Office</a></li>
-                    </ul>
+                <div class="footer-col">
+                    <h4>สำรวจ</h4>
+                    <a href="places.html">สถานที่ทั้งหมด</a>
+                    <a href="categories.html">แยกตามหมวดหมู่</a>
+                    <a href="ai.html">วางแผนด้วย AI</a>
+                    <a href="navigation.html">แผนที่นำทาง</a>
                 </div>
-                <div class="footer-categories">
-                    <h4>หมวดหมู่ยอดฮิต</h4>
-                    <ul>
-                        <li><a href="places.html?cat=nature"><i class="fa-solid fa-leaf"></i> ธรรมชาติ & ทะเลสาบ</a></li>
-                        <li><a href="places.html?cat=adventure"><i class="fa-solid fa-person-hiking"></i> ล่องแก่ง & ผจญภัย</a></li>
-                        <li><a href="places.html?cat=culture"><i class="fa-solid fa-landmark"></i> ประวัติศาสตร์ & ศรัทธา</a></li>
-                        <li><a href="places.html?cat=food"><i class="fa-solid fa-utensils"></i> อาหาร & คาเฟ่</a></li>
-                        <li><a href="places.html?cat=family"><i class="fa-solid fa-people-roof"></i> ครอบครัว & วิถีชุมชน</a></li>
-                    </ul>
+                <div class="footer-col">
+                    <h4>หมวดหมู่</h4>
+                    <a href="places.html?cat=nature">ธรรมชาติ</a>
+                    <a href="places.html?cat=adventure">ผจญภัย</a>
+                    <a href="places.html?cat=culture">วัฒนธรรม</a>
+                    <a href="places.html?cat=food">ของกิน</a>
                 </div>
-                <div class="footer-contact">
-                    <h4>ติดต่อ & แหล่งข้อมูล</h4>
-                    <p><i class="fa-solid fa-envelope"></i> contact@phatthalung-ai.travel</p>
-                    <p><i class="fa-solid fa-location-dot"></i> จังหวัดพัทลุง ภาคใต้ ประเทศไทย</p>
-                    <p><i class="fa-solid fa-shield-halved"></i> รหัสแอดมินค่าเริ่มต้น: <strong>1234</strong></p>
+                <div class="footer-col">
+                    <h4>บัญชี</h4>
+                    <a href="login.html">เข้าสู่ระบบ</a>
+                    <a href="register.html">สมัครสมาชิก</a>
+                    <a href="favorites.html">รายการโปรด</a>
+                    <a href="about.html">เกี่ยวกับโครงการ</a>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 Phatthalung AI Travel Planner. พัฒนาขึ้นเพื่อส่งเสริมและยกระดับการท่องเที่ยวจังหวัดพัทลุง</p>
+                <p>&copy; 2569 พัทลุงไกด์ — โครงการเพื่อส่งเสริมการท่องเที่ยวจังหวัดพัทลุง</p>
+                <span class="footer-coord">7.6250° N, 100.0917° E</span>
             </div>
         </div>
     </footer>
 
-    <!-- Firebase App & Realtime Database SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    
 
-    <!-- Leaflet JS & App Scripts -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
