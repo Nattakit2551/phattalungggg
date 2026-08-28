@@ -179,7 +179,16 @@ em, .text-accent {
     height: 1px;
     background: linear-gradient(90deg, transparent, var(--line-soft), transparent);
 }
-.rule-yor svg { width: 42px; height: 26px; flex-shrink: 0; }
+.rule-yor svg { width: 44px; height: 28px; flex-shrink: 0; }
+.rule-yor svg path,
+.rule-yor svg line,
+.rule-yor svg polyline {
+    stroke: var(--gold);
+    fill: none;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
 
 /* ---------- 5. Navbar ---------- */
 .navbar-wrapper {
@@ -214,7 +223,7 @@ em, .text-accent {
     box-shadow: 0 6px 20px -8px rgba(201, 162, 77, 0.7);
 }
 
-.logo-text { display: flex; flex-direction: column; line-height: 1.15; }
+.logo-text { display: flex; flex-direction: column; line-height: 1.35; }
 .logo-text strong {
     font-family: 'Trirong', serif;
     font-size: 1.16rem;
@@ -553,6 +562,7 @@ em, .text-accent {
     pointer-events: none;
 }
 .yor-overlay path, .yor-overlay line, .yor-overlay polyline {
+    stroke-linejoin: round;
     stroke: var(--gold-lt);
     fill: none;
     stroke-width: 1.4;
@@ -651,6 +661,10 @@ em, .text-accent {
     background-size: 11px;
 }
 .select-field:focus { outline: none; border-color: var(--gold); }
+
+.select-field.compact { min-width: 168px; }
+
+.filter-bar .select-group { display: flex; gap: 10px; flex-wrap: wrap; }
 
 .result-count {
     font-family: 'IBM Plex Mono', monospace;
@@ -808,10 +822,33 @@ em, .text-accent {
 .empty-state p { font-size: 0.9rem; }
 
 /* ---------- 11. หมวดหมู่ ---------- */
+/* auto-fit ทำให้จอกว้างได้ 4 คอลัมน์ การ์ด 5-6 ใบจึงเหลือเศษลอยชิดซ้าย
+   จึงเปลี่ยนมากำหนดจำนวนคอลัมน์ให้ตรงกับจำนวนการ์ดจริงของแต่ละหน้า */
 .cat-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
     gap: clamp(16px, 2.2vw, 24px);
+    align-items: stretch;
+}
+
+/* 6 ใบ → 3 คอลัมน์ ลงตัวพอดี 2 แถว */
+.cat-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+
+/* 4 ใบ → 2 คอลัมน์ ลงตัวพอดี 2 แถว */
+.cat-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+
+.cat-grid.cols-3 .cat-tile,
+.cat-grid.cols-2 .cat-tile { min-height: 232px; }
+
+@media (max-width: 980px) {
+    .cat-grid.cols-3 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 620px) {
+    .cat-grid,
+    .cat-grid.cols-3,
+    .cat-grid.cols-2 { grid-template-columns: 1fr; }
+    .cat-grid.cols-3 .cat-tile,
+    .cat-grid.cols-2 .cat-tile { min-height: 0; }
 }
 
 .cat-tile {
@@ -848,8 +885,22 @@ em, .text-accent {
     border: 1px solid rgba(201, 162, 77, 0.26);
     margin-bottom: 20px;
 }
+.cat-tile {
+    display: flex;
+    flex-direction: column;
+}
 .cat-tile h3 { margin-bottom: 8px; }
 .cat-tile p { font-size: 0.86rem; line-height: 1.65; }
+
+/* บรรทัดตัวอย่างสถานที่ ดันไปชิดขอบล่างของการ์ดเสมอ ทุกใบจึงเรียงตรงกัน */
+.cat-tile .tile-examples {
+    margin-top: auto;
+    padding-top: 16px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    line-height: 1.7;
+    color: var(--faint);
+}
 .cat-tile-count {
     position: absolute;
     top: 26px; right: 26px;
@@ -1926,4 +1977,92 @@ em, .text-accent {
 
     .footer-grid { grid-template-columns: 1fr; }
     .dedicated-floating-hud { width: calc(100% - 24px); }
+}
+
+
+/* ==========================================================================
+   ระบบหลังบ้าน — ส่วนที่เพิ่มเข้ามา
+   ========================================================================== */
+
+/* ตัวนับในเมนูแถบข้าง */
+.admin-nav-btn { justify-content: flex-start; }
+.admin-nav-btn span { flex: 1; }
+.admin-nav-btn em {
+    font-family: 'IBM Plex Mono', monospace;
+    font-style: normal;
+    font-size: 0.74rem;
+    padding: 2px 9px;
+    border-radius: var(--r-pill);
+    background: rgba(4, 16, 12, 0.45);
+    color: var(--gold-lt);
+}
+.admin-nav-btn.active em { background: rgba(4, 16, 12, 0.28); color: var(--ink); }
+
+/* แถบสัดส่วน — เดิมตัวเลขหลุดไปอยู่ใต้แถบเพราะ <b> อยู่นอก .cat-label */
+.progress-breakdown-list li + li { margin-top: 15px; }
+.cat-label b {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 5px;
+    white-space: nowrap;
+}
+.cat-label b small { font-size: 0.78em; font-weight: 400; }
+
+/* รายการอันดับ — เดิมรูปไม่มีการกำหนดขนาด จึงล้นกรอบจนข้อความซ้อนกัน */
+.rank-thumb {
+    width: 54px;
+    height: 42px;
+    flex-shrink: 0;
+    object-fit: cover;
+    border-radius: var(--r-sm);
+    border: 1px solid var(--line);
+}
+.top-ranking-list .rank-info { min-width: 0; }
+.top-ranking-list .rank-info strong {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--paper);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.top-ranking-list .rank-info small { display: block; font-size: 0.74rem; color: var(--faint); }
+
+/* ตรวจสุขภาพข้อมูล */
+.health-list { display: flex; flex-direction: column; gap: 3px; }
+.health-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    padding: 12px 8px;
+    border-bottom: 1px solid rgba(28, 65, 51, 0.5);
+}
+.health-row:last-child { border-bottom: none; }
+.health-row > i { margin-top: 3px; font-size: 0.95rem; flex-shrink: 0; }
+.health-row.ok > i { color: var(--jade); }
+.health-row.warn > i { color: var(--amber); }
+.health-row > div { flex: 1; min-width: 0; }
+.health-row strong { display: block; font-size: 0.88rem; font-weight: 500; color: var(--paper); }
+.health-row small {
+    display: block;
+    font-size: 0.77rem;
+    line-height: 1.55;
+    color: var(--faint);
+    margin-top: 2px;
+}
+.health-row > b {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.88rem;
+    flex-shrink: 0;
+}
+.health-row.ok > b { color: var(--jade); }
+.health-row.warn > b { color: var(--amber); }
+
+/* ปุ่มจัดการในตารางที่ถูกล็อก */
+.btn-action-icon:disabled { pointer-events: none; }
+
+/* ตารางแอดมินบนจอแคบ */
+@media (max-width: 1080px) {
+    .admin-nav-btn em { display: none; }
 }

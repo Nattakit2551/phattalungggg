@@ -32,20 +32,27 @@
                 </div>
             </a>
             <button class="admin-nav-btn active" id="tab-btn-dash" onclick="switchAdminTab('dash')">
-                <i class="fa-solid fa-chart-pie"></i> ภาพรวม
+                <i class="fa-solid fa-chart-pie"></i> <span>ภาพรวม</span>
             </button>
             <button class="admin-nav-btn" id="tab-btn-places" onclick="switchAdminTab('places')">
-                <i class="fa-solid fa-map-location-dot"></i> จัดการสถานที่ <span id="sidePlaceCount" style="margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; opacity: 0.75;">30</span>
+                <i class="fa-solid fa-map-location-dot"></i> <span>จัดการสถานที่</span>
+                <em id="sidePlaceCount">30</em>
             </button>
             <button class="admin-nav-btn" id="tab-btn-users" onclick="switchAdminTab('users')">
-                <i class="fa-solid fa-users"></i> สมาชิก
+                <i class="fa-solid fa-users"></i> <span>สมาชิก</span>
+                <em id="sideUserCount">0</em>
             </button>
             <div class="admin-side-foot">
-                <a href="index.html" class="admin-nav-btn"><i class="fa-solid fa-arrow-left"></i> กลับหน้าเว็บ</a>
+                <a href="index.html" class="admin-nav-btn"><i class="fa-solid fa-arrow-left"></i> <span>กลับหน้าเว็บ</span></a>
+                <button class="admin-nav-btn" onclick="logoutAdmin()" style="color: var(--rose);">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> <span>ออกจากระบบ</span>
+                </button>
             </div>
         </aside>
 
         <main class="admin-main-content">
+
+            <!-- ============ ภาพรวม ============ -->
             <div id="admin-sec-dash">
                 <div class="admin-top-header">
                     <div>
@@ -58,7 +65,7 @@
                 <div class="admin-stats-grid">
                     <div class="admin-stat-card">
                         <div class="stat-icon-wrap icon-teal"><i class="fa-solid fa-map-pin"></i></div>
-                        <div class="stat-meta"><h2 id="dashTotalPlaces">30</h2><p>สถานที่ในระบบ</p></div>
+                        <div class="stat-meta"><h2 id="dashTotalPlaces">0</h2><p>สถานที่ในระบบ</p></div>
                     </div>
                     <div class="admin-stat-card">
                         <div class="stat-icon-wrap icon-yellow"><i class="fa-solid fa-heart"></i></div>
@@ -69,42 +76,69 @@
                         <div class="stat-meta"><h2 id="dashTotalUsers">0</h2><p>สมาชิกที่สมัครไว้</p></div>
                     </div>
                     <div class="admin-stat-card">
-                        <div class="stat-icon-wrap icon-coral"><i class="fa-solid fa-database"></i></div>
-                        <div class="stat-meta"><h2 style="font-size: 1.1rem;">เครื่องนี้</h2><p>ที่เก็บข้อมูลปัจจุบัน</p></div>
+                        <div class="stat-icon-wrap icon-coral"><i class="fa-solid fa-star"></i></div>
+                        <div class="stat-meta"><h2 id="dashAvgRating">0</h2><p>คะแนนเฉลี่ยทุกแห่ง</p></div>
                     </div>
                 </div>
 
                 <div class="admin-details-grid">
                     <div class="admin-card">
-                        <h3><i class="fa-solid fa-chart-simple" style="color: var(--gold);"></i> สัดส่วนตามหมวดหมู่</h3>
+                        <h3><i class="fa-solid fa-chart-simple"></i> สัดส่วนตามหมวดหมู่</h3>
                         <ul class="progress-breakdown-list" id="dashCategoryList"></ul>
                     </div>
                     <div class="admin-card">
-                        <h3><i class="fa-solid fa-star" style="color: var(--gold);"></i> คะแนนสูงสุด 5 อันดับ</h3>
+                        <h3><i class="fa-solid fa-location-dot"></i> กระจายตามอำเภอ</h3>
+                        <ul class="progress-breakdown-list" id="dashDistrictList"></ul>
+                    </div>
+                </div>
+
+                <div class="admin-details-grid mt-3">
+                    <div class="admin-card">
+                        <h3><i class="fa-solid fa-star"></i> คะแนนสูงสุด 5 อันดับ</h3>
                         <ul class="top-ranking-list" id="dashTopRankingList"></ul>
+                    </div>
+                    <div class="admin-card">
+                        <h3><i class="fa-solid fa-stethoscope"></i> ตรวจสุขภาพข้อมูล</h3>
+                        <p class="form-hint" style="margin: -12px 0 16px;">ตรวจหาข้อมูลที่ขาดหรือผิดปกติ ซึ่งจะทำให้หน้าเว็บแสดงผลเพี้ยน</p>
+                        <ul class="health-list" id="dashHealthList"></ul>
                     </div>
                 </div>
             </div>
 
+            <!-- ============ จัดการสถานที่ ============ -->
             <div id="admin-sec-places" style="display: none;">
                 <div class="admin-top-header">
                     <div>
                         <span class="sub-badge">จัดการข้อมูล</span>
                         <h1>สถานที่ท่องเที่ยว</h1>
                     </div>
-                    <button onclick="openPlaceModal()" class="btn btn-glow btn-sm"><i class="fa-solid fa-plus"></i> เพิ่มสถานที่</button>
+                    <div style="display: flex; gap: 9px; flex-wrap: wrap;">
+                        <button onclick="exportPlacesJSON()" class="btn btn-outline btn-sm"><i class="fa-solid fa-download"></i> สำรองข้อมูล</button>
+                        <button onclick="document.getElementById('importFileInput').click()" class="btn btn-outline btn-sm"><i class="fa-solid fa-upload"></i> กู้คืน</button>
+                        <button onclick="openPlaceModal()" class="btn btn-glow btn-sm"><i class="fa-solid fa-plus"></i> เพิ่มสถานที่</button>
+                    </div>
                 </div>
+                <input type="file" id="importFileInput" accept="application/json" style="display: none;" onchange="importPlacesJSON(event)">
 
                 <div class="admin-card">
                     <div class="admin-table-filters">
                         <input type="text" id="adminPlaceSearch" class="admin-input-filter" placeholder="ค้นหาชื่อสถานที่ หรืออำเภอ" oninput="renderAdminPlacesTable()">
-                        <select id="adminPlaceCatFilter" class="admin-select-filter" onchange="renderAdminPlacesTable()">
+                        <select id="adminDistrictFilter" class="admin-select-filter" onchange="renderAdminPlacesTable()" aria-label="กรองตามอำเภอ">
+                            <option value="all">ทุกอำเภอ</option>
+                        </select>
+                        <select id="adminPlaceCatFilter" class="admin-select-filter" onchange="renderAdminPlacesTable()" aria-label="กรองตามหมวดหมู่">
                             <option value="all">ทุกหมวดหมู่</option>
                             <option value="nature">ธรรมชาติ</option>
                             <option value="adventure">ผจญภัย</option>
                             <option value="culture">วัฒนธรรม</option>
                             <option value="food">ของกิน</option>
                             <option value="family">ครอบครัว</option>
+                        </select>
+                        <select id="adminPlaceSort" class="admin-select-filter" onchange="renderAdminPlacesTable()" aria-label="เรียงลำดับ">
+                            <option value="id">เรียงตามลำดับที่เพิ่ม</option>
+                            <option value="rating">คะแนนมากไปน้อย</option>
+                            <option value="name">ชื่อ ก-ฮ</option>
+                            <option value="district">อำเภอ</option>
                         </select>
                     </div>
                     <div class="table-responsive">
@@ -119,30 +153,71 @@
                             <tbody id="adminPlacesTableBody"></tbody>
                         </table>
                     </div>
+                    <p class="form-hint mt-3" id="adminPlacesSummary"></p>
                 </div>
             </div>
 
+            <!-- ============ สมาชิก ============ -->
             <div id="admin-sec-users" style="display: none;">
                 <div class="admin-top-header">
                     <div>
                         <span class="sub-badge">สิทธิ์การใช้งาน</span>
                         <h1>สมาชิกในระบบ</h1>
                     </div>
+                    <div style="display: flex; gap: 9px; flex-wrap: wrap;">
+                        <button onclick="exportUsersCSV()" class="btn btn-outline btn-sm"><i class="fa-solid fa-file-csv"></i> ส่งออก CSV</button>
+                        <button onclick="openUserModal()" class="btn btn-glow btn-sm"><i class="fa-solid fa-user-plus"></i> เพิ่มสมาชิก</button>
+                    </div>
                 </div>
+
+                <div class="admin-stats-grid">
+                    <div class="admin-stat-card">
+                        <div class="stat-icon-wrap icon-cyan"><i class="fa-solid fa-users"></i></div>
+                        <div class="stat-meta"><h2 id="userStatTotal">0</h2><p>สมาชิกทั้งหมด</p></div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="stat-icon-wrap icon-yellow"><i class="fa-solid fa-shield-halved"></i></div>
+                        <div class="stat-meta"><h2 id="userStatAdmin">0</h2><p>ผู้ดูแลระบบ</p></div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="stat-icon-wrap icon-teal"><i class="fa-solid fa-user-plus"></i></div>
+                        <div class="stat-meta"><h2 id="userStatNew">0</h2><p>สมัครใน 30 วันล่าสุด</p></div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="stat-icon-wrap icon-coral"><i class="fa-solid fa-circle-user"></i></div>
+                        <div class="stat-meta"><h2 id="userStatOnline" style="font-size: 1.05rem;">-</h2><p>บัญชีที่ใช้อยู่ตอนนี้</p></div>
+                    </div>
+                </div>
+
                 <div class="admin-card">
+                    <div class="admin-table-filters">
+                        <input type="text" id="adminUserSearch" class="admin-input-filter" placeholder="ค้นหาชื่อ หรืออีเมล" oninput="renderAdminUsersTable()">
+                        <select id="adminUserRoleFilter" class="admin-select-filter" onchange="renderAdminUsersTable()" aria-label="กรองตามสิทธิ์">
+                            <option value="all">ทุกสิทธิ์</option>
+                            <option value="admin">ผู้ดูแลระบบ</option>
+                            <option value="member">สมาชิกทั่วไป</option>
+                        </select>
+                    </div>
                     <div class="table-responsive">
                         <table class="admin-table">
                             <thead>
-                                <tr><th>รูป</th><th>ชื่อผู้ใช้</th><th>อีเมล</th><th>สิทธิ์</th><th>วันที่สมัคร</th></tr>
+                                <tr>
+                                    <th>รูป</th><th>ชื่อผู้ใช้</th><th>อีเมล</th>
+                                    <th>สิทธิ์</th><th>วันที่สมัคร</th>
+                                    <th style="text-align: right;">จัดการ</th>
+                                </tr>
                             </thead>
                             <tbody id="adminUsersTableBody"></tbody>
                         </table>
                     </div>
+                    <p class="form-hint mt-3">สมาชิกที่แสดงคือคนที่สมัครผ่านหน้าสมัครสมาชิกบนเครื่องนี้ ข้อมูลเก็บในเบราว์เซอร์ ไม่ได้ซิงก์ข้ามเครื่อง</p>
                 </div>
             </div>
+
         </main>
     </div>
 
+    <!-- Modal สถานที่ -->
     <div class="modal-backdrop" id="place-crud-modal" onclick="if(event.target===this) closePlaceModal()">
         <div class="modal-box" style="max-width: 620px;">
             <button class="modal-close" onclick="closePlaceModal()" aria-label="ปิด"><i class="fa-solid fa-xmark"></i></button>
@@ -157,7 +232,8 @@
                         </div>
                         <div class="form-group">
                             <label for="modal-place-district">อำเภอ</label>
-                            <input type="text" id="modal-place-district" required>
+                            <input type="text" id="modal-place-district" list="districtOptions" required>
+                            <datalist id="districtOptions"></datalist>
                         </div>
                         <div class="form-group">
                             <label for="modal-place-category">หมวดหมู่</label>
@@ -181,6 +257,14 @@
                             <label for="modal-place-lng">ลองจิจูด</label>
                             <input type="number" id="modal-place-lng" step="any" placeholder="100.0917" required>
                         </div>
+                        <div class="form-group">
+                            <label for="modal-place-hours">เวลาทำการ</label>
+                            <input type="text" id="modal-place-hours" placeholder="08:00 - 17:00 น. (เปิดทุกวัน)">
+                        </div>
+                        <div class="form-group">
+                            <label for="modal-place-fee">ค่าเข้าชม</label>
+                            <input type="text" id="modal-place-fee" placeholder="ไม่มีค่าเข้าชม">
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="modal-place-image">ลิงก์รูปภาพ</label>
@@ -197,6 +281,38 @@
                     <div style="display: flex; gap: 10px; margin-top: 24px;">
                         <button type="submit" class="btn btn-glow" style="flex: 1;"><i class="fa-solid fa-floppy-disk"></i> บันทึก</button>
                         <button type="button" class="btn btn-outline" onclick="closePlaceModal()">ยกเลิก</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal สมาชิก -->
+    <div class="modal-backdrop" id="user-crud-modal" onclick="if(event.target===this) closeUserModal()">
+        <div class="modal-box" style="max-width: 480px;">
+            <button class="modal-close" onclick="closeUserModal()" aria-label="ปิด"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-body">
+                <h2 id="user-crud-title" class="mb-3"><i class="fa-solid fa-user-plus" style="color: var(--gold);"></i> เพิ่มสมาชิก</h2>
+                <form id="user-crud-form" onsubmit="handleUserSubmit(event)">
+                    <input type="hidden" id="user-original-email">
+                    <div class="form-group">
+                        <label for="user-name">ชื่อที่ใช้แสดง</label>
+                        <input type="text" id="user-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-email">อีเมล</label>
+                        <input type="email" id="user-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-role">สิทธิ์การใช้งาน</label>
+                        <select id="user-role">
+                            <option value="member">สมาชิกทั่วไป</option>
+                            <option value="admin">ผู้ดูแลระบบ</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; gap: 10px; margin-top: 24px;">
+                        <button type="submit" class="btn btn-glow" style="flex: 1;"><i class="fa-solid fa-floppy-disk"></i> บันทึก</button>
+                        <button type="button" class="btn btn-outline" onclick="closeUserModal()">ยกเลิก</button>
                     </div>
                 </form>
             </div>

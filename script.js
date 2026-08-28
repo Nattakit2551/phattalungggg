@@ -709,8 +709,45 @@ function initPlacesPage() {
             chip.classList.toggle('active', chip.getAttribute('data-cat') === cat);
         });
     }
+
+    populateDistrictOptions('districtSelect');
+
+    // รองรับลิงก์แบบ places.html?district=ควนขนุน
+    const district = params.get('district');
+    const districtSelect = document.getElementById('districtSelect');
+    if (district && districtSelect) {
+        const exists = [...districtSelect.options].some(o => o.value === district);
+        if (exists) districtSelect.value = district;
+    }
+
     filterPlaces();
     updateChipCounts();
+
+    // เปิดรายละเอียดทันทีเมื่อมาจากปุ่ม "ดูหน้าเว็บจริง" ในระบบหลังบ้าน
+    const previewId = parseInt(params.get('preview'), 10);
+    if (!isNaN(previewId) && PLACES.some(p => p.id === previewId)) {
+        setTimeout(() => openModal(previewId), 150);
+    }
+}
+
+// สร้างตัวเลือกอำเภอจากข้อมูลจริง เพื่อให้อำเภอที่แอดมินเพิ่มใหม่ขึ้นเองอัตโนมัติ
+function populateDistrictOptions(selectId, sourcePlaces) {
+    const select = document.getElementById(selectId);
+    if (!select) return;
+
+    const previous = select.value || 'all';
+    const districts = [...new Set(
+        (sourcePlaces || PLACES).map(p => (p.district || '').trim()).filter(Boolean)
+    )].sort((a, b) => a.localeCompare(b, 'th'));
+
+    select.innerHTML = '<option value="all">ทุกอำเภอ</option>'
+        + districts.map(d => {
+            const count = (sourcePlaces || PLACES).filter(p => p.district === d).length;
+            return `<option value="${d}">อ.${d} (${count})</option>`;
+        }).join('');
+
+    // คงค่าที่ผู้ใช้เลือกไว้ ถ้าอำเภอนั้นยังมีอยู่
+    select.value = districts.includes(previous) ? previous : 'all';
 }
 
 // อัปเดตตัวเลขจำนวนสถานที่บนปุ่มหมวดหมู่ให้ตรงกับข้อมูลจริง
@@ -744,17 +781,20 @@ function filterPlaces() {
     const countEl = document.getElementById('placesCount');
     const searchInput = document.getElementById('searchInput');
     const sortSelect = document.getElementById('sortSelect');
+    const districtSelect = document.getElementById('districtSelect');
     if (!grid) return;
 
     const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
     const sortBy = sortSelect ? sortSelect.value : 'rating';
+    const selectedDistrict = districtSelect ? districtSelect.value : 'all';
 
     let filtered = PLACES.filter(place => {
         const matchesCategory = (currentCategory === 'all' || place.category === currentCategory);
+        const matchesDistrict = (selectedDistrict === 'all' || place.district === selectedDistrict);
         const name = (place.name || '').toLowerCase();
         const district = (place.district || '').toLowerCase();
         const matchesQuery = !query || name.includes(query) || district.includes(query);
-        return matchesCategory && matchesQuery;
+        return matchesCategory && matchesDistrict && matchesQuery;
     });
 
     if (sortBy === 'rating') filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
@@ -764,11 +804,22 @@ function filterPlaces() {
 
     // เดิมถ้าค้นหาไม่เจอจะได้หน้าว่างเปล่าโดยไม่บอกอะไรเลย
     if (filtered.length === 0) {
+        const active = [];
+        if (currentCategory !== 'all') active.push('หมวดหมู่');
+        if (selectedDistrict !== 'all') active.push(`อ.${selectedDistrict}`);
+        if (query) active.push(`คำค้น "${query}"`);
+        const hint = active.length
+            ? `กำลังกรองด้วย ${active.join(' + ')} ลองปลดเงื่อนไขบางอย่างออกดู`
+            : 'ลองเปลี่ยนคำค้นหา หรือเลือกหมวดหมู่อื่นดู';
+
         grid.innerHTML = `
             <div class="empty-state">
                 <i class="fa-solid fa-magnifying-glass"></i>
                 <h3>ไม่พบสถานที่ที่ตรงกับเงื่อนไข</h3>
-                <p>ลองเปลี่ยนคำค้นหา หรือเลือกหมวดหมู่อื่นดู</p>
+                <p>${hint}</p>
+                <button class="btn btn-outline btn-sm mt-3" onclick="resetPlaceFilters()">
+                    <i class="fa-solid fa-rotate-left"></i> ล้างตัวกรองทั้งหมด
+                </button>
             </div>
         `;
         return;
@@ -808,6 +859,24 @@ function createPlaceCardHTML(place) {
             </div>
         </article>
     `;
+}
+
+// ล้างตัวกรองทั้งหมดกลับสู่ค่าเริ่มต้น
+function resetPlaceFilters() {
+    currentCategory = 'all';
+
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) searchInput.value = '';
+
+    const districtSelect = document.getElementById('districtSelect');
+    if (districtSelect) districtSelect.value = 'all';
+
+    document.querySelectorAll('.chip').forEach(chip => {
+        chip.classList.toggle('active', chip.getAttribute('data-cat') === 'all');
+    });
+
+    filterPlaces();
+    showToast('ล้างตัวกรองแล้ว');
 }
 
 function toggleFavorite(id) {
@@ -1826,11 +1895,20 @@ function filterFavoritesPage() {
     const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
     let favPlaces = PLACES.filter(p => favorites.includes(p.id));
 
+    // ตัวเลือกอำเภอในหน้านี้สร้างจากเฉพาะที่อยู่ในรายการโปรด ไม่ใช่ทั้งจังหวัด
+    populateDistrictOptions('favDistrictSelect', favPlaces);
+
+    const favDistrictSelect = document.getElementById('favDistrictSelect');
+    const selectedDistrict = favDistrictSelect ? favDistrictSelect.value : 'all';
+    if (selectedDistrict !== 'all') {
+        favPlaces = favPlaces.filter(p => p.district === selectedDistrict);
+    }
+
     if (query) {
-        favPlaces = favPlaces.filter(p => 
-            p.name.toLowerCase().includes(query) || 
-            p.district.toLowerCase().includes(query) ||
-            p.description.toLowerCase().includes(query)
+        favPlaces = favPlaces.filter(p =>
+            (p.name || '').toLowerCase().includes(query) ||
+            (p.district || '').toLowerCase().includes(query) ||
+            (p.description || '').toLowerCase().includes(query)
         );
     }
 
@@ -1886,8 +1964,9 @@ function initAdminGate() {
 
     if (isAdmin || isAuthed) {
         authModal.style.display = 'none';
-        dashboard.style.display = 'flex';
+        dashboard.style.display = 'grid';
         updateAdminDashboardStats();
+        renderAdminUsersTable();
     } else {
         authModal.style.display = 'flex';
         dashboard.style.display = 'none';
@@ -1910,8 +1989,9 @@ function handleAdminAuth(e) {
         const user = { name: "Nattakit", email: ADMIN_EMAIL, isAdmin: true };
         localStorage.setItem('phatthalung_user', JSON.stringify(user));
         document.getElementById('adminAuthModal').style.display = 'none';
-        document.getElementById('adminDashboard').style.display = 'flex';
+        document.getElementById('adminDashboard').style.display = 'grid';
         updateAdminDashboardStats();
+        renderAdminUsersTable();
         renderNavUserDropdown();
         showToast('ยืนยันรหัสผ่าน Admin สำเร็จ!');
     } else {
@@ -1958,61 +2038,222 @@ function switchAdminTab(tab) {
     }
 }
 
+// ==================== บัญชีสมาชิก ====================
+function loadAccounts() {
+    try {
+        const raw = JSON.parse(localStorage.getItem('phatthalung_accounts'));
+        if (Array.isArray(raw)) return raw.filter(a => a && a.email);
+    } catch (e) { /* ข้อมูลเสีย ใช้รายการว่าง */ }
+    return [];
+}
+
+function saveAccounts(accounts) {
+    try {
+        localStorage.setItem('phatthalung_accounts', JSON.stringify(accounts));
+        return true;
+    } catch (e) {
+        showToast('บันทึกข้อมูลสมาชิกไม่สำเร็จ (พื้นที่เก็บข้อมูลเต็ม)', 'error');
+        return false;
+    }
+}
+
+// รวมบัญชีที่สมัครไว้ เข้ากับบัญชีแอดมินและคนที่ล็อกอินอยู่ตอนนี้
+function getAllUsers() {
+    const accounts = loadAccounts();
+    const list = accounts.map(a => ({
+        name: a.name || (a.email ? a.email.split('@')[0] : 'ผู้ใช้งาน'),
+        email: a.email,
+        role: a.role || (a.email.toLowerCase() === ADMIN_EMAIL.toLowerCase() ? 'admin' : 'member'),
+        registeredAt: a.registeredAt || null
+    }));
+
+    // บัญชีแอดมินมีอยู่เสมอ แม้ไม่เคยกดสมัคร
+    if (!list.some(u => u.email.toLowerCase() === ADMIN_EMAIL.toLowerCase())) {
+        list.unshift({ name: 'Nattakit', email: ADMIN_EMAIL, role: 'admin', registeredAt: null });
+    }
+    return list;
+}
+
+function formatThaiDate(iso) {
+    if (!iso) return '—';
+    const d = new Date(iso);
+    if (isNaN(d.getTime())) return '—';
+    const months = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+    return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear() + 543}`;
+}
+
+function getCurrentUserEmail() {
+    try {
+        const u = JSON.parse(localStorage.getItem('phatthalung_user'));
+        return u && u.email ? u.email : null;
+    } catch (e) { return null; }
+}
+
+// ==================== ภาพรวมระบบ ====================
 function updateAdminDashboardStats() {
-    const totalEl = document.getElementById('dashTotalPlaces');
-    const sideCountEl = document.getElementById('sidePlaceCount');
-    const favCountEl = document.getElementById('dashTotalFavs');
-    if (totalEl) totalEl.innerText = `${PLACES.length}`;
-    if (sideCountEl) sideCountEl.innerText = `${PLACES.length}`;
-    if (favCountEl) favCountEl.innerText = `${favorites.length}`;
+    const users = getAllUsers();
 
-    const catList = document.getElementById('dashCategoryList');
-    if (catList) {
-        const catCounts = { nature: 0, adventure: 0, culture: 0, food: 0, family: 0 };
-        PLACES.forEach(p => { if (catCounts[p.category] !== undefined) catCounts[p.category]++; });
-        const total = PLACES.length || 1;
-        catList.innerHTML = `
-            <li><span class="cat-label">🌿 ธรรมชาติ</span><div class="bar-track"><div class="bar-progress" style="width: ${(catCounts.nature/total)*100}%;"></div></div><b>${catCounts.nature}</b></li>
-            <li><span class="cat-label">🛶 ผจญภัย</span><div class="bar-track"><div class="bar-progress" style="width: ${(catCounts.adventure/total)*100}%;"></div></div><b>${catCounts.adventure}</b></li>
-            <li><span class="cat-label">🏛️ วัฒนธรรม</span><div class="bar-track"><div class="bar-progress" style="width: ${(catCounts.culture/total)*100}%;"></div></div><b>${catCounts.culture}</b></li>
-            <li><span class="cat-label">🍲 อาหาร</span><div class="bar-track"><div class="bar-progress" style="width: ${(catCounts.food/total)*100}%;"></div></div><b>${catCounts.food}</b></li>
-            <li><span class="cat-label">👨‍👩‍👧‍👦 ครอบครัว</span><div class="bar-track"><div class="bar-progress" style="width: ${(catCounts.family/total)*100}%;"></div></div><b>${catCounts.family}</b></li>
-        `;
+    const set = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) el.innerText = value;
+    };
+
+    set('dashTotalPlaces', PLACES.length);
+    set('sidePlaceCount', PLACES.length);
+    set('dashTotalFavs', favorites.length);
+    set('dashTotalUsers', users.length);
+    set('sideUserCount', users.length);
+
+    const rated = PLACES.filter(p => !isNaN(parseFloat(p.rating)));
+    const avg = rated.length
+        ? (rated.reduce((sum, p) => sum + parseFloat(p.rating), 0) / rated.length).toFixed(2)
+        : '0';
+    set('dashAvgRating', avg);
+
+    renderBreakdown('dashCategoryList', 'category_name');
+    renderBreakdown('dashDistrictList', 'district', 'อ.');
+    renderTopRanking();
+    renderDataHealth();
+}
+
+// แถบสัดส่วน — เดิม <b> อยู่นอก .cat-label ทำให้ตัวเลขตกลงมาใต้แถบ
+function renderBreakdown(listId, field, prefix = '') {
+    const list = document.getElementById(listId);
+    if (!list) return;
+
+    const counts = {};
+    PLACES.forEach(p => {
+        const key = (p[field] || 'ไม่ระบุ').trim();
+        counts[key] = (counts[key] || 0) + 1;
+    });
+
+    const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    const total = PLACES.length || 1;
+
+    if (entries.length === 0) {
+        list.innerHTML = '<li class="form-hint">ยังไม่มีข้อมูล</li>';
+        return;
     }
 
-    const rankList = document.getElementById('dashTopRankingList');
-    if (rankList) {
-        const top5 = [...PLACES].sort((a, b) => b.rating - a.rating).slice(0, 5);
-        rankList.innerHTML = top5.map((p, idx) => `
-            <li>
-                <span class="rank-num">${idx + 1}</span>
-                <img src="${p.image}" alt="${p.name}">
-                <div class="rank-info"><h4>${p.name}</h4><p>อ.${p.district}</p></div>
-                <span class="score-pill"><i class="fa-solid fa-star"></i> ${p.rating}</span>
+    list.innerHTML = entries.map(([key, count]) => `
+        <li>
+            <div class="cat-label">
+                <span>${prefix}${key}</span>
+                <b>${count} <small style="color: var(--faint);">(${Math.round((count / total) * 100)}%)</small></b>
+            </div>
+            <div class="bar-track"><div class="bar-progress" style="width: ${(count / total) * 100}%;"></div></div>
+        </li>
+    `).join('');
+}
+
+// รายการ 5 อันดับ — เดิมใช้ <img> ที่ไม่มีการกำหนดขนาด รูปจึงล้นกรอบจนข้อความซ้อนกัน
+function renderTopRanking() {
+    const list = document.getElementById('dashTopRankingList');
+    if (!list) return;
+
+    const top5 = [...PLACES]
+        .sort((a, b) => (b.rating || 0) - (a.rating || 0))
+        .slice(0, 5);
+
+    if (top5.length === 0) {
+        list.innerHTML = '<li class="form-hint">ยังไม่มีข้อมูล</li>';
+        return;
+    }
+
+    list.innerHTML = top5.map((p, i) => `
+        <li>
+            <span class="rank-num">${i + 1}</span>
+            <img class="rank-thumb" src="${p.image || FALLBACK_IMAGE}" alt="${p.name}">
+            <div class="rank-info">
+                <strong>${p.name}</strong>
+                <small>อ.${p.district}</small>
+            </div>
+            <span class="score-pill"><i class="fa-solid fa-star"></i> ${p.rating}</span>
+        </li>
+    `).join('');
+}
+
+// ตรวจหาข้อมูลที่ขาดหรือผิดปกติ ซึ่งจะทำให้หน้าเว็บแสดงผลเพี้ยน
+function renderDataHealth() {
+    const list = document.getElementById('dashHealthList');
+    if (!list) return;
+
+    const badCoord = PLACES.filter(p => {
+        const lat = parseFloat(p.lat), lng = parseFloat(p.lng);
+        return isNaN(lat) || isNaN(lng) || lat < 7.0 || lat > 8.0 || lng < 99.6 || lng > 100.4;
+    });
+    const noImage = PLACES.filter(p => !p.image);
+    const noHours = PLACES.filter(p => !p.hours);
+    const noDesc = PLACES.filter(p => !p.description || p.description.length < 40);
+
+    const seen = {};
+    const dupCoord = [];
+    PLACES.forEach(p => {
+        const key = `${fmtCoord(p.lat, 4)},${fmtCoord(p.lng, 4)}`;
+        if (seen[key]) dupCoord.push(p); else seen[key] = true;
+    });
+
+    const checks = [
+        { label: 'พิกัดอยู่นอกเขตจังหวัดพัทลุง', items: badCoord, hint: 'กดนำทางแล้วจะพาไปผิดที่' },
+        { label: 'พิกัดซ้ำกับที่อื่น', items: dupCoord, hint: 'หมุดจะทับกันบนแผนที่' },
+        { label: 'ไม่มีรูปภาพ', items: noImage, hint: 'การ์ดจะใช้รูปสำรองแทน' },
+        { label: 'ไม่ได้ระบุเวลาทำการ', items: noHours, hint: 'ผู้ใช้ไม่รู้ว่าเปิดวันไหน' },
+        { label: 'คำอธิบายสั้นเกินไป', items: noDesc, hint: 'ต่ำกว่า 40 ตัวอักษร' }
+    ];
+
+    list.innerHTML = checks.map(c => {
+        const ok = c.items.length === 0;
+        const names = c.items.slice(0, 3).map(p => p.name).join(', ');
+        const more = c.items.length > 3 ? ` และอีก ${c.items.length - 3} แห่ง` : '';
+        return `
+            <li class="health-row ${ok ? 'ok' : 'warn'}">
+                <i class="fa-solid ${ok ? 'fa-circle-check' : 'fa-triangle-exclamation'}"></i>
+                <div>
+                    <strong>${c.label}</strong>
+                    <small>${ok ? 'ไม่พบปัญหา' : `${c.items.length} แห่ง — ${names}${more} · ${c.hint}`}</small>
+                </div>
+                <b>${c.items.length}</b>
             </li>
-        `).join('');
-    }
+        `;
+    }).join('');
 }
 
 function renderAdminPlacesTable() {
     const tbody = document.getElementById('adminPlacesTableBody');
     if (!tbody) return;
+
     const search = document.getElementById('adminPlaceSearch');
     const cat = document.getElementById('adminPlaceCatFilter');
+    const sortEl = document.getElementById('adminPlaceSort');
     const query = search ? search.value.toLowerCase().trim() : '';
     const selectedCat = cat ? cat.value : 'all';
+    const sortBy = sortEl ? sortEl.value : 'id';
+
+    populateDistrictOptions('adminDistrictFilter');
+    populateDistrictDatalist();
+    const distEl = document.getElementById('adminDistrictFilter');
+    const selectedDistrict = distEl ? distEl.value : 'all';
 
     let filtered = PLACES.filter(p => {
         const matchCat = (selectedCat === 'all' || p.category === selectedCat);
+        const matchDistrict = (selectedDistrict === 'all' || p.district === selectedDistrict);
         const matchQuery = !query
             || (p.name || '').toLowerCase().includes(query)
             || (p.district || '').toLowerCase().includes(query);
-        return matchCat && matchQuery;
+        return matchCat && matchDistrict && matchQuery;
     });
+
+    if (sortBy === 'rating') filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+    else if (sortBy === 'name') filtered.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'th'));
+    else if (sortBy === 'district') filtered.sort((a, b) => (a.district || '').localeCompare(b.district || '', 'th'));
+    else filtered.sort((a, b) => (a.id || 0) - (b.id || 0));
+
+    const summary = document.getElementById('adminPlacesSummary');
+    if (summary) summary.innerText = `แสดง ${filtered.length} จาก ${PLACES.length} แห่ง`;
 
     if (filtered.length === 0) {
         tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 2.5rem; color: var(--faint);">
-            <i class="fa-solid fa-folder-open" style="font-size: 1.8rem; display: block; margin-bottom: 8px;"></i>
+            <i class="fa-solid fa-folder-open" style="font-size: 1.8rem; display: block; margin-bottom: 10px;"></i>
             ไม่พบข้อมูลสถานที่ตามเงื่อนไขที่เลือก
         </td></tr>`;
         return;
@@ -2021,38 +2262,338 @@ function renderAdminPlacesTable() {
     tbody.innerHTML = filtered.map(p => `
         <tr>
             <td><img src="${p.image || FALLBACK_IMAGE}" class="table-thumb" alt="${p.name}"></td>
-            <td><strong>${p.name}</strong></td>
+            <td>
+                <strong>${p.name}</strong>
+                ${p.hours ? '' : '<small style="display:block; color: var(--amber); font-size: 0.7rem;"><i class="fa-solid fa-triangle-exclamation"></i> ยังไม่ระบุเวลาทำการ</small>'}
+            </td>
             <td>อ.${p.district}</td>
             <td><span class="place-category-badge" style="position: static;">${p.category_name || p.category}</span></td>
-            <td><b style="color: #f59e0b;"><i class="fa-solid fa-star"></i> ${p.rating}</b></td>
-            <td><small style="color: #64748b;">${fmtCoord(p.lat, 3)}, ${fmtCoord(p.lng, 3)}</small></td>
+            <td><b style="font-family: 'IBM Plex Mono', monospace; color: var(--gold-lt);"><i class="fa-solid fa-star" style="font-size: 0.72rem;"></i> ${p.rating}</b></td>
+            <td><small style="font-family: 'IBM Plex Mono', monospace; color: var(--faint);">${fmtCoord(p.lat, 3)}, ${fmtCoord(p.lng, 3)}</small></td>
             <td style="text-align: right; white-space: nowrap;">
-                <button class="btn-action-icon" onclick="editPlace(${p.id})"><i class="fa-solid fa-pen"></i></button>
-                <button class="btn-action-icon btn-delete" onclick="deletePlace(${p.id})"><i class="fa-solid fa-trash"></i></button>
+                <button class="btn-action-icon" onclick="previewPlace(${p.id})" title="ดูหน้าเว็บจริง"><i class="fa-solid fa-eye"></i></button>
+                <button class="btn-action-icon" onclick="editPlace(${p.id})" title="แก้ไข"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn-action-icon btn-delete" onclick="deletePlace(${p.id})" title="ลบ"><i class="fa-solid fa-trash"></i></button>
             </td>
         </tr>
     `).join('');
 }
 
+// เติมรายชื่ออำเภอที่มีอยู่ลงในช่องกรอก เพื่อลดการพิมพ์ชื่อผิดจนกลายเป็นอำเภอใหม่
+function populateDistrictDatalist() {
+    const dl = document.getElementById('districtOptions');
+    if (!dl) return;
+    const districts = [...new Set(PLACES.map(p => (p.district || '').trim()).filter(Boolean))]
+        .sort((a, b) => a.localeCompare(b, 'th'));
+    dl.innerHTML = districts.map(d => `<option value="${d}"></option>`).join('');
+}
+
+function previewPlace(id) {
+    window.open(`places.html?preview=${id}`, '_blank');
+}
+
 function renderAdminUsersTable() {
     const tbody = document.getElementById('adminUsersTableBody');
     if (!tbody) return;
-    tbody.innerHTML = `
+
+    const searchEl = document.getElementById('adminUserSearch');
+    const roleEl = document.getElementById('adminUserRoleFilter');
+    const query = searchEl ? searchEl.value.toLowerCase().trim() : '';
+    const roleFilter = roleEl ? roleEl.value : 'all';
+
+    const all = getAllUsers();
+    const currentEmail = getCurrentUserEmail();
+
+    const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
+    const setStat = (id, v) => { const el = document.getElementById(id); if (el) el.innerText = v; };
+    setStat('userStatTotal', all.length);
+    setStat('userStatAdmin', all.filter(u => u.role === 'admin').length);
+    setStat('userStatNew', all.filter(u => u.registeredAt && new Date(u.registeredAt).getTime() > thirtyDaysAgo).length);
+    const me = currentEmail ? all.find(u => u.email.toLowerCase() === currentEmail.toLowerCase()) : null;
+    setStat('userStatOnline', me ? me.name : (currentEmail || 'ยังไม่ได้เข้าสู่ระบบ'));
+
+    const filtered = all.filter(u => {
+        const matchRole = roleFilter === 'all' || u.role === roleFilter;
+        const matchQuery = !query
+            || (u.name || '').toLowerCase().includes(query)
+            || (u.email || '').toLowerCase().includes(query);
+        return matchRole && matchQuery;
+    });
+
+    if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 2.5rem; color: var(--faint);">
+            <i class="fa-solid fa-user-slash" style="font-size: 1.8rem; display: block; margin-bottom: 10px;"></i>
+            ${all.length === 0 ? 'ยังไม่มีใครสมัครสมาชิกบนเครื่องนี้' : 'ไม่พบสมาชิกตามเงื่อนไขที่เลือก'}
+        </td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = filtered.map(u => {
+        const initial = (u.name || u.email || 'U').charAt(0).toUpperCase();
+        const isAdmin = u.role === 'admin';
+        const isProtected = u.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+        const isMe = currentEmail && u.email.toLowerCase() === currentEmail.toLowerCase();
+        const safeEmail = u.email.replace(/'/g, "\\'");
+        const lockAttr = isProtected ? 'disabled style="opacity: .35; cursor: not-allowed;"' : '';
+
+        return `
         <tr>
-            <td><div class="avatar-badge" style="background: #f59e0b;">N</div></td>
-            <td><strong>Nattakit</strong></td>
-            <td>nattakit@gmail.com</td>
-            <td><span class="badge-role-admin"><i class="fa-solid fa-shield"></i> ผู้ดูแลระบบ (Admin)</span></td>
-            <td>20 ส.ค. 2569</td>
-        </tr>
-        <tr>
-            <td><div class="avatar-badge" style="background: #10b981;">L</div></td>
-            <td><strong>Loka</strong></td>
-            <td>nattakitsenchoo@gmail.com</td>
-            <td><span class="badge-role-user"><i class="fa-solid fa-user"></i> สมาชิกทั่วไป</span></td>
-            <td>15 ส.ค. 2569</td>
-        </tr>
-    `;
+            <td><div class="avatar-badge"${isAdmin ? ' style="background: linear-gradient(145deg, var(--gold-lt), var(--gold)); color: var(--ink);"' : ''}>${initial}</div></td>
+            <td>
+                <strong>${u.name}</strong>
+                ${isMe ? '<small style="display: block; color: var(--jade); font-size: 0.72rem;">กำลังใช้งานอยู่</small>' : ''}
+            </td>
+            <td><small style="font-family: 'IBM Plex Mono', monospace; color: var(--sub);">${u.email}</small></td>
+            <td>
+                <span class="${isAdmin ? 'badge-role-admin' : 'badge-role-user'}">
+                    <i class="fa-solid ${isAdmin ? 'fa-shield-halved' : 'fa-user'}"></i>
+                    ${isAdmin ? 'ผู้ดูแลระบบ' : 'สมาชิกทั่วไป'}
+                </span>
+            </td>
+            <td><small style="color: var(--faint);">${formatThaiDate(u.registeredAt)}</small></td>
+            <td style="text-align: right; white-space: nowrap;">
+                <button class="btn-action-icon" onclick="toggleUserRole('${safeEmail}')" ${lockAttr}
+                        title="${isProtected ? 'บัญชีแอดมินหลัก เปลี่ยนสิทธิ์ไม่ได้' : (isAdmin ? 'ลดเป็นสมาชิกทั่วไป' : 'เลื่อนเป็นผู้ดูแลระบบ')}">
+                    <i class="fa-solid ${isAdmin ? 'fa-arrow-down' : 'fa-arrow-up'}"></i>
+                </button>
+                <button class="btn-action-icon" onclick="editUser('${safeEmail}')" title="แก้ไข"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn-action-icon btn-delete" onclick="deleteUser('${safeEmail}')" ${lockAttr}
+                        title="${isProtected ? 'ลบบัญชีแอดมินหลักไม่ได้' : 'ลบสมาชิก'}">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </td>
+        </tr>`;
+    }).join('');
+}
+
+function openUserModal() {
+    const modal = document.getElementById('user-crud-modal');
+    if (!modal) return;
+    modal.classList.add('active');
+    const form = document.getElementById('user-crud-form');
+    if (form) form.reset();
+    const orig = document.getElementById('user-original-email');
+    if (orig) orig.value = '';
+    const title = document.getElementById('user-crud-title');
+    if (title) title.innerHTML = '<i class="fa-solid fa-user-plus" style="color: var(--gold);"></i> เพิ่มสมาชิก';
+}
+
+function closeUserModal() {
+    const modal = document.getElementById('user-crud-modal');
+    if (modal) modal.classList.remove('active');
+}
+
+function editUser(email) {
+    const user = getAllUsers().find(u => u.email.toLowerCase() === email.toLowerCase());
+    if (!user) {
+        showToast('ไม่พบสมาชิกรายนี้', 'error');
+        return;
+    }
+    openUserModal();
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+    set('user-original-email', user.email);
+    set('user-name', user.name);
+    set('user-email', user.email);
+    set('user-role', user.role);
+    const title = document.getElementById('user-crud-title');
+    if (title) title.innerHTML = '<i class="fa-solid fa-pen-to-square" style="color: var(--gold);"></i> แก้ไขสมาชิก';
+}
+
+function handleUserSubmit(e) {
+    e.preventDefault();
+
+    const name = document.getElementById('user-name').value.trim();
+    const email = document.getElementById('user-email').value.trim();
+    const role = document.getElementById('user-role').value;
+    const originalEmail = document.getElementById('user-original-email').value;
+
+    if (!name) {
+        showToast('กรุณากรอกชื่อที่ใช้แสดง', 'error');
+        return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showToast('รูปแบบอีเมลไม่ถูกต้อง', 'error');
+        return;
+    }
+
+    let accounts = loadAccounts();
+    const duplicate = accounts.some(a =>
+        a.email.toLowerCase() === email.toLowerCase() &&
+        a.email.toLowerCase() !== originalEmail.toLowerCase());
+    if (duplicate) {
+        showToast('อีเมลนี้มีอยู่ในระบบแล้ว', 'error');
+        return;
+    }
+
+    if (originalEmail) {
+        const idx = accounts.findIndex(a => a.email.toLowerCase() === originalEmail.toLowerCase());
+        if (idx !== -1) accounts[idx] = { ...accounts[idx], name, email, role };
+        else accounts.push({ name, email, role, registeredAt: new Date().toISOString() });
+    } else {
+        accounts.push({ name, email, role, registeredAt: new Date().toISOString() });
+    }
+
+    if (!saveAccounts(accounts)) return;
+
+    closeUserModal();
+    renderAdminUsersTable();
+    updateAdminDashboardStats();
+    showToast(originalEmail ? 'บันทึกข้อมูลสมาชิกแล้ว' : 'เพิ่มสมาชิกใหม่แล้ว');
+}
+
+function toggleUserRole(email) {
+    if (email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+        showToast('บัญชีแอดมินหลักเปลี่ยนสิทธิ์ไม่ได้', 'error');
+        return;
+    }
+
+    let accounts = loadAccounts();
+    const idx = accounts.findIndex(a => a.email.toLowerCase() === email.toLowerCase());
+    if (idx === -1) {
+        showToast('ไม่พบสมาชิกรายนี้', 'error');
+        return;
+    }
+
+    const next = (accounts[idx].role || 'member') === 'admin' ? 'member' : 'admin';
+    if (next === 'admin' && !confirm(`ให้สิทธิ์ผู้ดูแลระบบกับ ${accounts[idx].name || email}?\n\nผู้ดูแลระบบจะเพิ่ม แก้ไข และลบข้อมูลสถานที่ได้ทั้งหมด`)) return;
+
+    accounts[idx].role = next;
+    if (!saveAccounts(accounts)) return;
+
+    renderAdminUsersTable();
+    updateAdminDashboardStats();
+    showToast(next === 'admin' ? 'เลื่อนเป็นผู้ดูแลระบบแล้ว' : 'ลดเป็นสมาชิกทั่วไปแล้ว');
+}
+
+function deleteUser(email) {
+    if (email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+        showToast('ลบบัญชีแอดมินหลักไม่ได้', 'error');
+        return;
+    }
+
+    const user = getAllUsers().find(u => u.email.toLowerCase() === email.toLowerCase());
+    if (!confirm(`ลบสมาชิก "${user ? user.name : email}" ออกจากระบบ?\n\nการลบนี้ย้อนกลับไม่ได้`)) return;
+
+    const accounts = loadAccounts().filter(a => a.email.toLowerCase() !== email.toLowerCase());
+    if (!saveAccounts(accounts)) return;
+
+    const current = getCurrentUserEmail();
+    if (current && current.toLowerCase() === email.toLowerCase()) {
+        localStorage.removeItem('phatthalung_user');
+    }
+
+    renderAdminUsersTable();
+    updateAdminDashboardStats();
+    showToast('ลบสมาชิกเรียบร้อยแล้ว');
+}
+
+function exportUsersCSV() {
+    const users = getAllUsers();
+    if (users.length === 0) {
+        showToast('ยังไม่มีข้อมูลสมาชิกให้ส่งออก', 'error');
+        return;
+    }
+
+    const esc = v => `"${String(v == null ? '' : v).replace(/"/g, '""')}"`;
+    const rows = [['ชื่อ', 'อีเมล', 'สิทธิ์', 'วันที่สมัคร']];
+    users.forEach(u => rows.push([
+        u.name, u.email,
+        u.role === 'admin' ? 'ผู้ดูแลระบบ' : 'สมาชิกทั่วไป',
+        formatThaiDate(u.registeredAt)
+    ]));
+
+    // \ufeff คือ BOM ทำให้ Excel เปิดไฟล์แล้วอ่านภาษาไทยไม่เป็นตัวต่างดาว
+    const csv = '\ufeff' + rows.map(r => r.map(esc).join(',')).join('\n');
+    downloadFile(csv, `members-${new Date().toISOString().slice(0, 10)}.csv`, 'text/csv;charset=utf-8;');
+    showToast(`ส่งออกข้อมูลสมาชิก ${users.length} รายแล้ว`);
+}
+
+// ==================== สำรอง / กู้คืนข้อมูล ====================
+function downloadFile(content, filename, mime) {
+    try {
+        const blob = new Blob([content], { type: mime });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch (err) {
+        showToast('ดาวน์โหลดไฟล์ไม่สำเร็จ', 'error');
+    }
+}
+
+function exportPlacesJSON() {
+    if (PLACES.length === 0) {
+        showToast('ยังไม่มีข้อมูลให้สำรอง', 'error');
+        return;
+    }
+    const payload = {
+        exportedAt: new Date().toISOString(),
+        schemaVersion: DB_SCHEMA_VERSION,
+        count: PLACES.length,
+        places: PLACES
+    };
+    downloadFile(JSON.stringify(payload, null, 2),
+        `phatthalung-places-${new Date().toISOString().slice(0, 10)}.json`,
+        'application/json');
+    showToast(`สำรองข้อมูล ${PLACES.length} แห่งแล้ว`);
+}
+
+function importPlacesJSON(event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+        try {
+            const data = JSON.parse(reader.result);
+            const incoming = Array.isArray(data) ? data : data.places;
+
+            if (!Array.isArray(incoming) || incoming.length === 0) {
+                showToast('ไฟล์นี้ไม่มีข้อมูลสถานที่', 'error');
+                return;
+            }
+
+            const valid = incoming.filter(p =>
+                p && p.name && !isNaN(parseFloat(p.lat)) && !isNaN(parseFloat(p.lng)));
+
+            if (valid.length === 0) {
+                showToast('ข้อมูลในไฟล์ไม่ถูกต้อง ต้องมีชื่อและพิกัดครบ', 'error');
+                return;
+            }
+
+            const skipped = incoming.length - valid.length;
+            const msg = `กู้คืนข้อมูล ${valid.length} แห่ง แทนที่ข้อมูลปัจจุบัน ${PLACES.length} แห่ง?`
+                + (skipped ? `\n\nมี ${skipped} รายการที่ข้อมูลไม่ครบและจะถูกข้าม` : '')
+                + '\n\nแนะนำให้กดสำรองข้อมูลปัจจุบันไว้ก่อน';
+            if (!confirm(msg)) return;
+
+            // ออก id ใหม่ให้เรียงกัน กันไฟล์ที่มี id ซ้ำหรือหายไป
+            PLACES = valid.map((p, i) => ({ ...p, id: i + 1 }));
+            savePlacesToStorage();
+
+            // ตัดรายการโปรดที่ชี้ไปยัง id ที่ไม่มีแล้วออก
+            const ids = PLACES.map(p => p.id);
+            favorites = favorites.filter(f => ids.includes(f));
+            localStorage.setItem('phatthalung_favs', JSON.stringify(favorites));
+
+            updateAdminDashboardStats();
+            renderAdminPlacesTable();
+            showToast(`กู้คืนข้อมูล ${PLACES.length} แห่งเรียบร้อยแล้ว`);
+        } catch (err) {
+            showToast('อ่านไฟล์ไม่สำเร็จ ต้องเป็นไฟล์ JSON ที่ถูกต้อง', 'error');
+        } finally {
+            event.target.value = '';
+        }
+    };
+    reader.onerror = () => {
+        showToast('อ่านไฟล์ไม่สำเร็จ', 'error');
+        event.target.value = '';
+    };
+    reader.readAsText(file);
 }
 
 function openPlaceModal() {
@@ -2065,8 +2606,10 @@ function openPlaceModal() {
     const idField = document.getElementById('modal-place-id');
     if (idField) idField.value = '';
 
+    populateDistrictDatalist();
+
     const title = document.getElementById('modal-crud-title');
-    if (title) title.innerHTML = '<i class="fa-solid fa-plus text-accent"></i> เพิ่มสถานที่ใหม่';
+    if (title) title.innerHTML = '<i class="fa-solid fa-plus" style="color: var(--gold);"></i> เพิ่มสถานที่ใหม่';
 }
 
 function closePlaceModal() {
@@ -2098,9 +2641,11 @@ function editPlace(id) {
     setValue('modal-place-image', place.image);
     setValue('modal-place-desc', place.description);
     setValue('modal-place-highlight', place.highlight);
+    setValue('modal-place-hours', place.hours);
+    setValue('modal-place-fee', place.fee);
 
     const title = document.getElementById('modal-crud-title');
-    if (title) title.innerHTML = '<i class="fa-solid fa-pen-to-square text-accent"></i> แก้ไขสถานที่';
+    if (title) title.innerHTML = '<i class="fa-solid fa-pen-to-square" style="color: var(--gold);"></i> แก้ไขสถานที่';
 }
 
 function deletePlace(id) {
@@ -2119,6 +2664,7 @@ function deletePlace(id) {
 
         updateAdminDashboardStats();
         renderAdminPlacesTable();
+        populateDistrictOptions('adminDistrictFilter');
         showToast('ลบสถานที่เรียบร้อยแล้ว');
     }
 }
@@ -2159,6 +2705,13 @@ function handlePlaceSubmit(e) {
         description: document.getElementById('modal-place-desc').value.trim(),
         highlight: document.getElementById('modal-place-highlight').value.trim()
     };
+
+    // ช่องที่เพิ่มเข้ามาใหม่ ถ้าปล่อยว่างให้คงค่าเดิมไว้ ไม่ใช่เขียนทับด้วยค่าว่าง
+    const optional = { hours: 'modal-place-hours', fee: 'modal-place-fee' };
+    Object.keys(optional).forEach(key => {
+        const el = document.getElementById(optional[key]);
+        if (el && el.value.trim()) placeData[key] = el.value.trim();
+    });
 
     // ไม่ให้ข้อมูลรายละเอียด (เวลาทำการ/ค่าเข้า/สิ่งอำนวยความสะดวก) หายตอนแก้ไขผ่านฟอร์ม
     // เพราะฟอร์มไม่มีช่องกรอกฟิลด์เหล่านี้
@@ -2251,7 +2804,7 @@ function handleRegister(event) {
             return;
         }
 
-        accounts.push({ name: name, email: email, registeredAt: new Date().toISOString() });
+        accounts.push({ name: name, email: email, role: 'member', registeredAt: new Date().toISOString() });
         localStorage.setItem('phatthalung_accounts', JSON.stringify(accounts));
 
         const userData = {
@@ -2335,6 +2888,19 @@ function handleLogin(event) {
             };
             localStorage.setItem('phatthalung_user', JSON.stringify(userData));
             sessionStorage.removeItem('isAdminAuthed');
+
+            // บันทึกลงรายชื่อสมาชิกถ้ายังไม่มี ไม่งั้นคนที่ล็อกอินตรงๆ จะไม่ขึ้นในหน้าแอดมิน
+            const accounts = loadAccounts();
+            if (!accounts.some(a => a.email.toLowerCase() === email.toLowerCase())) {
+                accounts.push({
+                    name: displayName,
+                    email: email,
+                    role: 'member',
+                    registeredAt: new Date().toISOString()
+                });
+                saveAccounts(accounts);
+            }
+
             showToast('เข้าสู่ระบบสำเร็จ ยินดีต้อนรับ!');
             setTimeout(() => window.location.href = 'index.html', 500);
         } else {
