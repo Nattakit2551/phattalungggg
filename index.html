@@ -60,16 +60,20 @@
                     <span class="eyebrow">จังหวัดพัทลุง · ภาคใต้</span>
                     <h1>ทะเลสาบ ภูเขา และยอยักษ์<em>ในจังหวัดที่คนมักขับผ่าน</em></h1>
                     <p class="lede">พัทลุงอยู่ระหว่างหาดใหญ่กับนครศรีธรรมราช คนส่วนใหญ่จึงขับผ่านไปโดยไม่แวะ ทั้งที่นี่คือที่ตั้งของพื้นที่ชุ่มน้ำโลกแห่งแรกของไทย ควายน้ำฝูงสุดท้าย และภูเขาที่มีรูทะลุกลางลูก</p>
+                    <p class="live-clock mt-3">
+                        ตอนนี้ <b data-live-clock style="font-weight:600;">--:--</b> น. ·
+                        เปิดอยู่ <b data-live-open-count style="color: var(--gold-lt); font-weight:600;">0</b> แห่ง
+                    </p>
                     <div class="hero-actions">
                         <a href="places.html" class="btn btn-glow"><i class="fa-solid fa-compass"></i> ดูสถานที่ทั้งหมด</a>
                         <a href="ai.html" class="btn btn-outline"><i class="fa-solid fa-wand-magic-sparkles"></i> ให้ AI จัดทริปให้</a>
                     </div>
                     <div class="hero-stats">
-                        <div class="stat-item"><b id="heroPlaceCount">30</b><span>สถานที่พร้อมพิกัด</span></div>
+                        <div class="stat-item"><b id="heroPlaceCount">0</b><span>สถานที่พร้อมพิกัด</span></div>
                         <div class="stat-divider"></div>
-                        <div class="stat-item"><b>7</b><span>อำเภอที่ครอบคลุม</span></div>
+                        <div class="stat-item"><b id="heroDistrictCount">0</b><span>อำเภอที่ครอบคลุม</span></div>
                         <div class="stat-divider"></div>
-                        <div class="stat-item"><b>5</b><span>เส้นทางทริปสำเร็จรูป</span></div>
+                        <div class="stat-item"><b id="heroRouteCount">0</b><span>เส้นทางทริปสำเร็จรูป</span></div>
                     </div>
                 </div>
                 <div class="hero-plate">
@@ -127,31 +131,31 @@
                     <div class="cat-tile-icon"><i class="fa-solid fa-leaf"></i></div>
                     <h3>ธรรมชาติ</h3>
                     <p>ทะเลน้อย น้ำตก บ่อน้ำร้อน และอ่างเก็บน้ำกลางหุบเขา</p>
-                    <span class="cat-tile-count">12 แห่ง</span>
+                    <span class="cat-tile-count" data-cat-count="nature">-</span>
                 </a>
                 <a href="places.html?cat=adventure" class="cat-tile">
                     <div class="cat-tile-icon"><i class="fa-solid fa-person-hiking"></i></div>
                     <h3>ผจญภัย</h3>
                     <p>ล่องแก่ง พายคายัค นั่งเรือลอดถ้ำ และจุดชมวิวที่ต้องลุยหน่อย</p>
-                    <span class="cat-tile-count">5 แห่ง</span>
+                    <span class="cat-tile-count" data-cat-count="adventure">-</span>
                 </a>
                 <a href="places.html?cat=culture" class="cat-tile">
                     <div class="cat-tile-icon"><i class="fa-solid fa-torii-gate"></i></div>
                     <h3>วัฒนธรรม</h3>
                     <p>วัดอายุพันปี ถ้ำพระ และตลาดชุมชนที่เปิดเฉพาะวันหยุด</p>
-                    <span class="cat-tile-count">6 แห่ง</span>
+                    <span class="cat-tile-count" data-cat-count="culture">-</span>
                 </a>
                 <a href="places.html?cat=food" class="cat-tile">
                     <div class="cat-tile-icon"><i class="fa-solid fa-bowl-rice"></i></div>
                     <h3>ของกิน</h3>
                     <p>ตลาดเย็นหน้าสถานีรถไฟ คาเฟ่ริมทะเลสาบ และร้านบนเนินเขา</p>
-                    <span class="cat-tile-count">4 แห่ง</span>
+                    <span class="cat-tile-count" data-cat-count="food">-</span>
                 </a>
                 <a href="places.html?cat=family" class="cat-tile">
                     <div class="cat-tile-icon"><i class="fa-solid fa-children"></i></div>
                     <h3>ครอบครัว</h3>
                     <p>สวนกิจกรรม ศูนย์เรียนรู้วิถีชาวนา และงานสานกระจูด</p>
-                    <span class="cat-tile-count">3 แห่ง</span>
+                    <span class="cat-tile-count" data-cat-count="family">-</span>
                 </a>
                 <a href="ai.html" class="cat-tile">
                     <div class="cat-tile-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>

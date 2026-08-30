@@ -701,11 +701,20 @@ em, .text-accent {
 .place-card-img {
     position: relative;
     height: 208px;
-    background-size: cover;
-    background-position: center;
+    overflow: hidden;
+    background: var(--moss);
+}
+.place-card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
     transition: transform 0.7s var(--ease);
 }
-.place-card:hover .place-card-img { transform: scale(1.05); }
+.place-card:hover .place-card-img img { transform: scale(1.05); }
+
+/* รูปที่โหลดไม่ขึ้นแล้วสลับไปใช้ภาพสำรอง ทำให้จางลงเล็กน้อยเพื่อไม่ให้ดูเหมือนภาพจริง */
+.place-card-img.img-fallback img { opacity: 0.55; filter: saturate(0.6); }
 .place-card-img::after {
     content: '';
     position: absolute; inset: 0;
@@ -786,7 +795,8 @@ em, .text-accent {
 
 .btn-action-icon {
     width: 38px; height: 38px;
-    display: grid; place-items: center;
+    display: inline-grid; place-items: center;
+    vertical-align: middle;
     border-radius: 50%;
     border: 1px solid var(--line);
     color: var(--sub);
@@ -2066,3 +2076,226 @@ em, .text-accent {
 @media (max-width: 1080px) {
     .admin-nav-btn em { display: none; }
 }
+
+
+/* กลุ่มปุ่มจัดการในตารางแอดมิน ให้อยู่แถวเดียวกันและชิดขวาเสมอ */
+.admin-table td .btn-action-icon {
+    width: 34px;
+    height: 34px;
+    margin-left: 4px;
+}
+.admin-table td .btn-action-icon:first-child { margin-left: 0; }
+
+
+/* แถบสถานะการเชื่อมต่อคลาวด์ ในหน้าแอดมิน */
+.cloud-status {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 15px 18px;
+    margin-bottom: 22px;
+    border: 1px solid var(--line);
+    border-left-width: 3px;
+    border-radius: var(--r-md);
+    background: var(--lacquer);
+}
+.cloud-status > i { font-size: 1.05rem; margin-top: 3px; flex-shrink: 0; }
+.cloud-status strong { display: block; font-size: 0.9rem; color: var(--paper); }
+.cloud-status small {
+    display: block;
+    font-size: 0.79rem;
+    line-height: 1.6;
+    color: var(--faint);
+    margin-top: 2px;
+}
+.cloud-status.ok    { border-left-color: var(--jade); }
+.cloud-status.ok > i    { color: var(--jade); }
+.cloud-status.warn  { border-left-color: var(--amber); }
+.cloud-status.warn > i  { color: var(--amber); }
+.cloud-status.error { border-left-color: var(--rose); }
+.cloud-status.error > i { color: var(--rose); }
+
+/* ==========================================================================
+   สถานะเปิด/ปิดแบบเรียลไทม์ และลูกเล่นบนหน้าเว็บ
+   ========================================================================== */
+
+.card-meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+.card-meta-row .place-district { margin-bottom: 0; }
+
+.open-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    border-radius: var(--r-pill);
+    border: 1px solid transparent;
+    white-space: nowrap;
+    transition: all 0.3s var(--ease);
+}
+.open-badge i { font-size: 0.62rem; }
+
+.open-badge.open {
+    color: #6EE7B7;
+    background: rgba(52, 179, 135, 0.13);
+    border-color: rgba(52, 179, 135, 0.36);
+}
+.open-badge.closing {
+    color: var(--amber);
+    background: rgba(224, 168, 60, 0.13);
+    border-color: rgba(224, 168, 60, 0.36);
+}
+.open-badge.closed {
+    color: #F0A99B;
+    background: rgba(229, 115, 95, 0.11);
+    border-color: rgba(229, 115, 95, 0.3);
+}
+
+/* จุดกะพริบบอกว่าข้อมูลอัปเดตสด */
+.open-badge.open i {
+    animation: livePulse 2.4s ease-in-out infinite;
+}
+@keyframes livePulse {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.35; }
+}
+
+/* ปุ่มกรอง "เปิดอยู่ตอนนี้" */
+.chip.chip-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    border-color: rgba(52, 179, 135, 0.4);
+    color: #6EE7B7;
+}
+.chip.chip-live::before {
+    content: '';
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--jade);
+    box-shadow: 0 0 0 0 rgba(52, 179, 135, 0.7);
+    animation: liveDot 2s infinite;
+}
+@keyframes liveDot {
+    0%   { box-shadow: 0 0 0 0 rgba(52, 179, 135, 0.6); }
+    70%  { box-shadow: 0 0 0 7px rgba(52, 179, 135, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(52, 179, 135, 0); }
+}
+.chip.chip-live.active {
+    color: var(--ink);
+    background: linear-gradient(140deg, #6EE7B7, var(--jade));
+    border-color: transparent;
+}
+.chip.chip-live.active::before { background: var(--ink); box-shadow: none; animation: none; }
+
+/* นาฬิกาสดในหัวข้อ */
+.live-clock {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.74rem;
+    color: var(--jade);
+}
+.live-clock::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--jade);
+    animation: liveDot 2s infinite;
+}
+
+/* ค่อยๆ ปรากฏเมื่อเลื่อนถึง */
+.reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.65s var(--ease), transform 0.65s var(--ease);
+}
+.reveal.revealed { opacity: 1; transform: none; }
+
+/* การ์ดเอียงตามเมาส์ */
+.place-card {
+    transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+    transform-style: preserve-3d;
+}
+.place-card:hover {
+    transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) translateY(-5px);
+}
+
+/* แถบความคืบหน้าการเลื่อน */
+.scroll-progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    width: 0;
+    z-index: 1200;
+    background: linear-gradient(90deg, var(--gold-deep), var(--gold-lt));
+    transition: width 0.1s linear;
+    pointer-events: none;
+}
+
+/* ปุ่มกลับขึ้นบน */
+.back-to-top {
+    position: fixed;
+    right: clamp(16px, 3vw, 28px);
+    bottom: clamp(16px, 3vw, 28px);
+    z-index: 800;
+    width: 46px; height: 46px;
+    display: grid; place-items: center;
+    border-radius: 50%;
+    color: var(--ink);
+    background: linear-gradient(140deg, var(--gold-lt), var(--gold));
+    box-shadow: 0 10px 28px -10px rgba(201, 162, 77, 0.8);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(14px) scale(0.9);
+    transition: all 0.3s var(--ease);
+}
+.back-to-top.show { opacity: 1; visibility: visible; transform: none; }
+.back-to-top:hover { transform: translateY(-3px); }
+
+@media (max-width: 640px) {
+    .back-to-top { width: 42px; height: 42px; bottom: 76px; }
+    .card-meta-row { gap: 6px; }
+    .open-badge { font-size: 0.66rem; padding: 3px 8px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; }
+    .place-card { transform: none; }
+    .open-badge.open i, .chip.chip-live::before, .live-clock::before { animation: none; }
+}
+
+
+/* แถบบอกเวอร์ชันไฟล์ในหน้าแอดมิน ใช้ตรวจว่าอัปเดตไฟล์แล้วหรือยัง */
+.version-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+}
+.ver-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 13px;
+    font-size: 0.78rem;
+    border-radius: var(--r-pill);
+    border: 1px solid var(--line);
+    background: var(--lacquer);
+    color: var(--sub);
+}
+.ver-chip b { font-family: 'IBM Plex Mono', monospace; color: var(--paper); }
+.ver-chip i { font-size: 0.72rem; }
+.ver-chip.ok i { color: var(--jade); }
+.ver-chip.warn { border-color: rgba(224, 168, 60, 0.4); }
+.ver-chip.warn i { color: var(--amber); }

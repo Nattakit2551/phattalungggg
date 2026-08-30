@@ -80,6 +80,7 @@
             </div>
 
             <div class="chip-row">
+                <button class="chip chip-live" id="btnOpenNow" onclick="toggleOpenNowFilter(this)">เปิดอยู่ตอนนี้</button>
                 <button class="chip active" data-cat="all" onclick="setCategoryFilter('all', this)">ทั้งหมด</button>
                 <button class="chip" data-cat="nature" onclick="setCategoryFilter('nature', this)">ธรรมชาติ</button>
                 <button class="chip" data-cat="adventure" onclick="setCategoryFilter('adventure', this)">ผจญภัย</button>
@@ -88,7 +89,10 @@
                 <button class="chip" data-cat="family" onclick="setCategoryFilter('family', this)">ครอบครัว</button>
             </div>
 
-            <p class="result-count mt-2 mb-3">พบ <b id="placesCount">30</b> แห่ง</p>
+            <p class="result-count mt-2 mb-3">
+                พบ <b id="placesCount">0</b> แห่ง ·
+                <span class="live-clock">ตอนนี้ <b data-live-clock>--:--</b> น. เปิดอยู่ <b data-live-open-count>0</b> แห่ง</span>
+            </p>
             <div class="places-grid" id="placesGrid"></div>
         </div>
     </section>

@@ -62,6 +62,13 @@
                     <button onclick="openPlaceModal()" class="btn btn-glow btn-sm"><i class="fa-solid fa-plus"></i> เพิ่มสถานที่</button>
                 </div>
 
+                <div class="version-row" id="dataVersionBadge"></div>
+
+                <div class="cloud-status" id="cloudStatus">
+                    <i class="fa-solid fa-wifi"></i>
+                    <div><strong>กำลังตรวจสอบการเชื่อมต่อ...</strong><small>&nbsp;</small></div>
+                </div>
+
                 <div class="admin-stats-grid">
                     <div class="admin-stat-card">
                         <div class="stat-icon-wrap icon-teal"><i class="fa-solid fa-map-pin"></i></div>
@@ -113,7 +120,16 @@
                         <h1>สถานที่ท่องเที่ยว</h1>
                     </div>
                     <div style="display: flex; gap: 9px; flex-wrap: wrap;">
+                        <button onclick="pushPlacesToCloud()" class="btn btn-outline btn-sm" title="ส่งข้อมูลในเครื่องนี้ขึ้นคลาวด์ ทุกคนจะเห็นตรงกัน">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> อัปโหลดขึ้นคลาวด์
+                        </button>
+                        <button onclick="pullPlacesFromCloud()" class="btn btn-outline btn-sm" title="ดึงข้อมูลจากคลาวด์มาทับข้อมูลในเครื่องนี้">
+                            <i class="fa-solid fa-cloud-arrow-down"></i> ดึงจากคลาวด์
+                        </button>
                         <button onclick="exportPlacesJSON()" class="btn btn-outline btn-sm"><i class="fa-solid fa-download"></i> สำรองข้อมูล</button>
+                        <button onclick="resetPlacesToDefault()" class="btn btn-outline btn-sm" title="ล้างข้อมูลในเครื่องแล้วโหลดชุดตั้งต้นจากไฟล์ใหม่" style="color: var(--amber);">
+                            <i class="fa-solid fa-rotate-left"></i> รีเซ็ตเป็นชุดตั้งต้น
+                        </button>
                         <button onclick="document.getElementById('importFileInput').click()" class="btn btn-outline btn-sm"><i class="fa-solid fa-upload"></i> กู้คืน</button>
                         <button onclick="openPlaceModal()" class="btn btn-glow btn-sm"><i class="fa-solid fa-plus"></i> เพิ่มสถานที่</button>
                     </div>
@@ -165,6 +181,9 @@
                         <h1>สมาชิกในระบบ</h1>
                     </div>
                     <div style="display: flex; gap: 9px; flex-wrap: wrap;">
+                        <button onclick="pushAllAccountsToCloud()" class="btn btn-outline btn-sm" title="ส่งรายชื่อที่มีอยู่ในเครื่องนี้ขึ้นคลาวด์">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> อัปโหลดขึ้นคลาวด์
+                        </button>
                         <button onclick="exportUsersCSV()" class="btn btn-outline btn-sm"><i class="fa-solid fa-file-csv"></i> ส่งออก CSV</button>
                         <button onclick="openUserModal()" class="btn btn-glow btn-sm"><i class="fa-solid fa-user-plus"></i> เพิ่มสมาชิก</button>
                     </div>

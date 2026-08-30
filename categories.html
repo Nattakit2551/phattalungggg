@@ -69,35 +69,35 @@
                     <h3>ธรรมชาติ</h3>
                     <p>พื้นที่ชุ่มน้ำโลกแห่งแรกของไทย น้ำตกในเขตเขาบรรทัด บ่อน้ำแร่ร้อน และอ่างเก็บน้ำที่ยังไม่มีใครรู้จัก</p>
                     <p class="tile-examples">ทะเลน้อย · คลองปากประ · น้ำตกไพรวัลย์</p>
-                    <span class="cat-tile-count">12 แห่ง</span>
+                    <span class="cat-tile-count" data-cat-count="nature">-</span>
                 </a>
                 <a href="places.html?cat=adventure" class="cat-tile">
                     <div class="cat-tile-icon"><i class="fa-solid fa-person-hiking"></i></div>
                     <h3>ผจญภัย</h3>
                     <p>พายคายัคล่องแก่งบนสายน้ำจากเขาบรรทัด นั่งเรือลอดถ้ำหินปูน และปีนขึ้นจุดชมวิวที่รถเก๋งขึ้นไม่ได้</p>
                     <p class="tile-examples">หนานมดแดง · ถ้ำน้ำเย็น · ควนเลียบ</p>
-                    <span class="cat-tile-count">5 แห่ง</span>
+                    <span class="cat-tile-count" data-cat-count="adventure">-</span>
                 </a>
                 <a href="places.html?cat=culture" class="cat-tile">
                     <div class="cat-tile-icon"><i class="fa-solid fa-torii-gate"></i></div>
                     <h3>วัฒนธรรม</h3>
                     <p>พระบรมธาตุอายุกว่าพันปี ถ้ำที่ประดิษฐานพระพุทธรูป และตลาดชุมชนที่เปิดสัปดาห์ละวัน</p>
                     <p class="tile-examples">วัดเขียนบางแก้ว · หลาดใต้โหนด</p>
-                    <span class="cat-tile-count">6 แห่ง</span>
+                    <span class="cat-tile-count" data-cat-count="culture">-</span>
                 </a>
                 <a href="places.html?cat=food" class="cat-tile">
                     <div class="cat-tile-icon"><i class="fa-solid fa-bowl-rice"></i></div>
                     <h3>ของกิน</h3>
                     <p>ตลาดเย็นหน้าสถานีรถไฟที่คนพัทลุงกินจริง คาเฟ่ริมทะเลสาบ และร้านกาแฟบนเนินเขาที่ต้องนั่งรถกระบะขึ้น</p>
                     <p class="tile-examples">ตลาดรถไฟ · HLNG Cafe</p>
-                    <span class="cat-tile-count">4 แห่ง</span>
+                    <span class="cat-tile-count" data-cat-count="food">-</span>
                 </a>
                 <a href="places.html?cat=family" class="cat-tile">
                     <div class="cat-tile-icon"><i class="fa-solid fa-children"></i></div>
                     <h3>ครอบครัว</h3>
                     <p>สวนกิจกรรมกลางแจ้งสำหรับเด็ก ศูนย์เรียนรู้วิถีชาวนาที่ให้อาหารควายได้ และแหล่งงานสานกระจูด</p>
                     <p class="tile-examples">เดอลองการ์เด้น · นาโปแก</p>
-                    <span class="cat-tile-count">3 แห่ง</span>
+                    <span class="cat-tile-count" data-cat-count="family">-</span>
                 </a>
                 <a href="ai.html" class="cat-tile">
                     <div class="cat-tile-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
@@ -123,13 +123,15 @@
                 </div>
             </div>
             <div class="chip-row" style="flex-wrap: wrap;">
-                <a href="places.html?district=ควนขนุน" class="chip">อ.ควนขนุน <span style="opacity:.6; font-family:'IBM Plex Mono',monospace; font-size:.78em;">9</span></a>
-                <a href="places.html?district=เมืองพัทลุง" class="chip">อ.เมืองพัทลุง <span style="opacity:.6; font-family:'IBM Plex Mono',monospace; font-size:.78em;">7</span></a>
-                <a href="places.html?district=กงหรา" class="chip">อ.กงหรา <span style="opacity:.6; font-family:'IBM Plex Mono',monospace; font-size:.78em;">4</span></a>
-                <a href="places.html?district=เขาชัยสน" class="chip">อ.เขาชัยสน <span style="opacity:.6; font-family:'IBM Plex Mono',monospace; font-size:.78em;">4</span></a>
-                <a href="places.html?district=ป่าพะยอม" class="chip">อ.ป่าพะยอม <span style="opacity:.6; font-family:'IBM Plex Mono',monospace; font-size:.78em;">3</span></a>
-                <a href="places.html?district=ศรีนครินทร์" class="chip">อ.ศรีนครินทร์ <span style="opacity:.6; font-family:'IBM Plex Mono',monospace; font-size:.78em;">2</span></a>
-                <a href="places.html?district=ตะโหมด" class="chip">อ.ตะโหมด <span style="opacity:.6; font-family:'IBM Plex Mono',monospace; font-size:.78em;">1</span></a>
+                <a href="places.html?district=เมืองพัทลุง" class="chip">อ.เมืองพัทลุง <span data-district-count="เมืองพัทลุง" style="opacity:.6; font-family:'IBM Plex Mono',monospace; font-size:.78em;">-</span></a>
+                <a href="places.html?district=ควนขนุน" class="chip">อ.ควนขนุน <span data-district-count="ควนขนุน" style="opacity:.6; font-family:'IBM Plex Mono',monospace; font-size:.78em;">-</span></a>
+                <a href="places.html?district=กงหรา" class="chip">อ.กงหรา <span data-district-count="กงหรา" style="opacity:.6; font-family:'IBM Plex Mono',monospace; font-size:.78em;">-</span></a>
+                <a href="places.html?district=ศรีนครินทร์" class="chip">อ.ศรีนครินทร์ <span data-district-count="ศรีนครินทร์" style="opacity:.6; font-family:'IBM Plex Mono',monospace; font-size:.78em;">-</span></a>
+                <a href="places.html?district=เขาชัยสน" class="chip">อ.เขาชัยสน <span data-district-count="เขาชัยสน" style="opacity:.6; font-family:'IBM Plex Mono',monospace; font-size:.78em;">-</span></a>
+                <a href="places.html?district=ป่าพะยอม" class="chip">อ.ป่าพะยอม <span data-district-count="ป่าพะยอม" style="opacity:.6; font-family:'IBM Plex Mono',monospace; font-size:.78em;">-</span></a>
+                <a href="places.html?district=ตะโหมด" class="chip">อ.ตะโหมด <span data-district-count="ตะโหมด" style="opacity:.6; font-family:'IBM Plex Mono',monospace; font-size:.78em;">-</span></a>
+                <a href="places.html?district=บางแก้ว" class="chip">อ.บางแก้ว <span data-district-count="บางแก้ว" style="opacity:.6; font-family:'IBM Plex Mono',monospace; font-size:.78em;">-</span></a>
+                <a href="places.html?district=ศรีบรรพต" class="chip">อ.ศรีบรรพต <span data-district-count="ศรีบรรพต" style="opacity:.6; font-family:'IBM Plex Mono',monospace; font-size:.78em;">-</span></a>
             </div>
 
         </div>
